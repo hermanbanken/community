@@ -1,0 +1,48 @@
+{
+  "name": "community",
+  "version": "0.0.1",
+  "description": "Community",
+  "author": "Herman Banken",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hermanbanken/community.git"
+  },
+  "dependencies": {
+    "express": "3.x",
+    "express-partials": "*",
+    "ejs": "~0.8.5",
+    "express3-handlebars": "~0.5.0",
+    "mongodb": "1.3.x",
+    "socket.io": "1.0.6",
+    "underscore": "1.5.x",
+    "passport": "*",
+    "passport-google": "*",
+    "q": "1.0.x",
+    "moment": "~2.7.0",
+    "typescript": "~1.0.1",
+    "mongoose": ""
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "~1.14.0",
+    "mocha-as-promised": "~1.4.1",
+    "chai-as-promised": "~4.1.0",
+    "supertest": "~0.8.2",
+    "superagent": "~0.15.7",
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-nodeunit": "~0.3.3",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-less": "~0.11.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-typescript": ""
+  },
+  "config": {
+  	"port": 3000,
+    "hostname": "community.org",
+    "mongouri": "mongodb://localhost/community"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,81 @@
+.changes {
+  list-style: none;
+  padding: 0;
+  min-height: 109px;
+  
+  .change { 
+    float: left;
+    margin-right: 5px;
+    
+    div.name, input { 
+      display: block; 
+      height: 1.6em; 
+      width: @size-lg;
+      text-align: center;
+    }
+    div.name {
+      overflow: hidden;
+    }
+    input:before {
+      content: "&euro;";
+    }
+    div.img {
+      position: relative;
+      .btn, .amount {
+        text-align: center;
+        display: none;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        background: black;
+        padding: 2px;
+        width: 20px;
+        height: 20px;
+        line-height: 1em;
+        text-decoration: none;
+        color: white;
+        border-radius: 0;
+        /* Different boxes */
+        &[data-action=down] { left: 0; right: auto; }
+        &.amount { top: 0; bottom: auto; display: block; width: auto; min-width: 20px; }
+        &.amount[data-amount="1"] { display: none; }
+      }
+      &:hover .btn { display: block; }
+    }
+  }
+  
+  .add { 
+    float: left;
+    border: 2px dashed gray;
+    width: 150px;
+    border-radius: 10px;
+    margin-top: 1.5em;
+    background: white;
+    overflow: hidden;
+    z-index: 1;
+    
+    input, input:focus, input:visited, input:hover {
+      display: block;
+      height: 60px;
+      border: none;
+      box-sizing: border-box;
+      padding: 10px;
+      -webkit-appearance: none;
+      outline: none;
+      background: transparent;
+    }
+    
+    ul {
+      padding: 0;
+      li {
+        padding: 2px 10px;
+        list-style: none;
+        display:block;
+        border-top: 2px dashed gray;
+      }
+      z-index: 2;
+    }
+
+    .is-typeahead { color: gray; margin-left: 1px; }
+  }
+}

@@ -1,0 +1,70 @@
+
+{{#with bill}}
+<form role="form" method="post" action="/bills/{{#if _id}}{{_id}}{{/if}}">
+<div class="container">
+  <div class="row">
+  	<div class="col-md-3">
+  		{{#if _id}}
+      <h2>Edit bill</h2>
+      {{else}}
+      <h2>Create bill</h2>
+      {{/if}}
+  	</div>
+  </div>
+  <div class="row">
+  	<div class="col-md-3">
+  	   <input type="hidden" name="_id" value="{{_id}}" /> 
+        <div class="form-group">
+          <label for="date">{{t 'Name'}}</label>
+          <input name="title" id="title" class="form-control" value="{{title}}" placeholder="{{t 'Bill name'}}" required />
+        </div>
+        <div class="form-group">
+          <label for="date">{{t 'Date'}}</label>
+          <input name="date" type="date" class="form-control" id="date" placeholder="Datum" value="{{datef date 'YYYY-MM-DD'}}" />
+        </div>
+        <div class="form-group">
+          <label for="note">{{t 'Note'}}</label>
+          <textarea id="note" class="form-control" name="note" rows="3">{{note}}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="type">{{t 'Type'}}</label>
+          <select name="type" class="form-control">
+          	{{#each ../billTypes}}
+    		      <option value="{{this}}" {{#isEqual this to=../type}}selected{{/isEqual}}>{{t this}}</option>
+    		    {{/each}}
+  	      </select>
+        </div>
+        <button type="submit" class="btn btn-default">{{t 'Save'}}</button>
+        {{#if _id}}
+        <a data-action='remove' class="btn btn-danger pull-right">{{t 'Delete'}}</a>
+        {{else}}
+        <a href='javascript:history.back()' class="btn btn-danger pull-right">{{t 'Cancel'}}</a>
+        {{/if}}
+    </div>
+    <div class="col-md-9">
+      <ul class='accounts'>
+      {{#each ../accounts}}
+        <li class='money-entry'>
+          Account - {{name}}
+          <input type="number" step="0.01" name="account[{{name}}]" value="" />
+      Difficiency comes from account:
+      {{#each ../accounts}}
+        <li class='money-entry'>
+          Account - {{this.name}}
+          <input type="number" step="0.01" name="balances[{{_id}}]" value="{{changeFor .. _id}}" />
+        </li>
+      {{/each}}
+
+      Changes per user:
+      {{#each ../users}}
+        <li class='money-entry'>
+          User - {{name profile.name}}
+          <input type="number" step="0.01" name="changes[{{_id}}]" value="{{changeFor .. _id}}" />
+        </li>
+      {{/each}}
+      </ul>
+    </div>
+  </div>
+</div>
+</form>
+{{/with}}

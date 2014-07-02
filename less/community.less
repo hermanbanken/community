@@ -1,0 +1,16 @@
+/* Euro formatting */
+.euro-col { min-width: 80px; text-align: right; }
+.euro {
+  text-align: right;
+  &:after { content: "\20AC"; padding-left: .3em; float: right }
+}
+
+.bill .h2 { margin-top: 20px; margin-bottom: 10px; }
+
+@import "main.less";
+@import "utils.less";
+@import "navbar.less";
+@import "tables.less";
+@import "user-tile.less";
+@import "stat-tile.less";
+@import "history.less";

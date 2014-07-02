@@ -1,0 +1,50 @@
+<!--<div class="container-fluid">
+  <div class="row stat-bar nav-bar navbar-default">
+    <div class="stat-tile col-md-3 col-xs-6"><span>€ 100,-</span><span>Saldo</span></div>
+    <div class="stat-tile col-md-3 col-xs-6"><span>0</span><span>Declaraties</span></div>
+    <div class="stat-tile col-md-3 col-xs-6"><span>2</span><span>Bonnen deze maand</span></div>
+    <div class="stat-tile col-md-3 col-xs-6"><span>€ 100,-</span><span>Prognose</span></div>
+  </div>
+</div>-->
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+        <h2>{{t 'Users'}}</h2>
+        <div class="table-wrap">
+            <table class="table table-striped table-hover">
+                <thead><tr>
+                  <th>{{t 'User'}}</th>
+                  <th>{{t 'Email'}}</th>
+                  <th>{{t 'Tags'}}</th>
+                  <th class='euro-col'>{{t 'Balance'}}</th>
+                </tr></thead>
+                {{#each users}}
+                <tr>
+                  <td><a href="/users/{{_id}}">{{name profile.name}}</a></td>
+                  <td>{{#each profile.emails}}{{#if @index}}, {{/if}}{{this.value}}{{/each}}</td>
+                  <td>{{#each tags}}<span class='tag badge'>{{this}}</span> {{/each}}</td>
+                  <td class='euro'>{{currency saldo}}</td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </div>
+    <div class="col-md-4">
+      <h2>{{t 'Accounts'}}</h2>
+        <div class="table-wrap">
+            <table class="table table-striped table-hover">
+                <thead><tr>
+                  <th>{{t 'Account'}}</th>
+                  <th class='euro-col'>{{t 'Balance'}}</th>
+                </tr></thead>
+                {{#each accounts}}
+                <tr>
+                  <td><a href="/accounts/{{_id}}">{{this.name}}</a></td>
+                  <td class='euro'>{{currency saldo}}</td>
+                </tr>
+                {{/each}}
+            </table>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+.table-wrap {
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    & > table { width: 100%; margin: 0; }
+    border: 1px solid #ddd;
+    min-height: 2em;
+    max-height: 500px;
+}
+
+.table-wrap .table > tbody > tr > td { vertical-align: middle; }

@@ -1,0 +1,23 @@
+@navbar-border: #e7e7e7;
+@navbar-bg: #f8f8f8;
+
+.overlay {
+  position: absolute;
+  right: 0;
+  top: 50px;
+  bottom: 0;
+  width: 50%;
+  background: #fff;
+  border-left: 1px solid @navbar-border;
+  box-shadow: 15px 0 15px rgba(0,0,0,.4);
+  
+  .bar {
+    padding: 4px;
+    background: @navbar-bg;
+    border-bottom: 1px solid @navbar-border;
+  }
+}
+
+.navbar {
+  .login { @media (min-width: 768px){ margin: 9px -15px 0 -15px; }}
+}
