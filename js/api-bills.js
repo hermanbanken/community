@@ -50,11 +50,14 @@ var exports = function(ExpressApp, Database){
 
 	function handleBillSave(req, res){
 		(new Bill(req.body)).save().then(function(id){
+			if(typeof id == 'undefined')
+				throw new Error();
+			
 			if(req.accepts('html','json') == 'html')	
 				res.redirect('/bills/'+id)
 			else	
 				res.redirect(201, '/bills/'+id)
-		}, function(err){
+		}).catch(function(err){
 			res.send(400, err.message);
 		})
 	}

@@ -1,25 +1,10 @@
 var _ = require("underscore"),
 	Q = require("q"),
 	BSON = require('mongodb').BSONPure,
-	Cache = require('../cache');
+	Cache = require('../cache'),
+	utils = require("../utils");
 
 module.exports = function(Database){
-
-	function toDict(input, keyF, valueF){
-		var ret = {};
-		for(n in input){
-			ret[keyF(n)] = valueF(input[n]);
-		}
-		return ret;
-	}
-
-	var C = Database.then(function(_){
-		return _.collection('bills')
-	})
-
-	function ensureOID(id){
-		return id instanceof BSON.ObjectID ? id : new BSON.ObjectID(id);
-	}
 
 	function Bill(o){
 		if(typeof o !== 'object')
@@ -35,7 +20,7 @@ module.exports = function(Database){
 			}
 
 			if(n == 'balances' || n == 'changes'){
-				this[n] = toDict(o[n], ensureOID, parseInt);
+				this[n] = utils.toDict(o[n], utils.ensureOID, parseInt);
 				continue;
 			}
 
@@ -44,20 +29,11 @@ module.exports = function(Database){
 	}
 
 	Bill.byId = function(id){
-		id = ensureOID(id);
-		return C.then(function(_){
-			return Q.nfcall(_.findOne.bind(_, { _id: id }));
-		}).then(function(i){
-			return new Bill(i);
-		});
+		return utils.findById(Database, 'bills', Bill, id);
 	}
 
 	Bill.find = function(query){
-		return C.then(function(_){
-			return Q.nfcall(_.find().toArray.bind(_));
-		}).then(function(list){
-			return list.map(function(i){ return new Bill(i) })
-		})
+		return utils.find.bind(utils, Database, 'bills', Bill).apply(arguments);
 	};
 
 	Bill.types = function(){
@@ -75,32 +51,11 @@ module.exports = function(Database){
 	};
 
 	Bill.prototype.save = function(){
-		return Q.fcall(function () {
-			// validate
-			if(this.validate() !== true)
-				throw new Error(this.validate());
-			return true;
-		}.bind(this)).then(function(){
-			// Prepare document
-			this.lastModified = new Date;
-			var doc = { 
-				$set: _.clone(this), 
-				$setOnInsert: { createdAt: new Date }
-			},
-			id = this._id && new BSON.ObjectID(this._id) || new BSON.ObjectID(),
-			query = { _id: id };
-			delete doc['$set']._id;
-
-			// Execute update
-			return C.then(function(_){
-				return Q.nfcall(_.findAndModify.bind(_, query, [], doc, { upsert: true }))
-			}).then(function(result){	
+		return utils.saveModel(Database, 'bills', this)
+			.then(function(id){	
 				Cache.clear('saldos');
 				return id;
-			}, function(err){
-				console.log("Error", err)
-			});
-		}.bind(this));		
+			})
 	};
 
 	return Bill;

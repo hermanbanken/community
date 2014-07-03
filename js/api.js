@@ -30,40 +30,50 @@ module.exports = function(ExpressApp, Database){
 	})
 
 	app.get('/users/:id', function(req, res){
-		Q.all([User.byId(req.params['id']), Bill.find({ changes: {$elemMatch: req.params['id']}})]).spread(function(user, bills){
-			res.render('user-form', {
-				title: user.profile.name.givenName + ' - Users',
-				user: user,
-				bills: bills,
-				editable: true,
-				userTypes: User.types(),
-			});
-		}, function(err){
+		Q.all([
+			User.byId(req.params['id']), 
+			Bill.find({ changes: {$elemMatch: req.params['id']}})
+		]).spread(function(user, bills){
+			if(req.accepts('html','json') == 'html')	
+				res.render('user-form', {
+					title: user.profile && user.profile.name.givenName + ' - Users',
+					user: user,
+					bills: bills,
+					editable: true,
+					userTypes: User.types(),
+				});
+			else	
+				res.redirect(201, '/users/'+id)
+			
+		}).catch(function(err){
 			console.error(err.stack);
 			res.send(500);
 		})
 	})
 
 	// Create new bill
-	app.post('/users', lib.WithData, handleUserSave)
+	app.post('/users', handleUserSave)
 	// Modify existing bill
 	app.put('/users/:id', lib.WithData, handleUserSave)
-	app.post('/users/:id', /*lib.Authenticated, */lib.WithData, handleUserSave)
+	app.post('/users/:id', /*lib.Authenticated, */ handleUserSave)
 
 	function handleUserSave(req, res){
-		var data = { profile: req.body.profile };
-		console.log("Saving", data);
-		if(req.params.id)
-			data._id = req.params.id;
-
-		(new User({ profile: req.body.profile })).save().then(function(id){
+		User.byId(req.body.id).then(function(user){ 
+			user.profile = req.body.profile;
+			console.log("Saving", user);
+			return user.save();
+		}).then(function(id){
+			console.log("Result from saving", id);
 			if(req.accepts('html','json') == 'html')	
 				res.redirect('/users/'+id)
 			else	
 				res.redirect(201, '/users/'+id)
 		}, function(err){
+			console.log("Error while saving");
+			console.error(err);
 			res.send(400, err.message);
-		})
+		});
+		
 	}
 
 	/*app.post('/user', lib.Authenticated, lib.WithData, function(req, res){

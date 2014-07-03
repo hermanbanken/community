@@ -19,8 +19,7 @@
     "passport-google": "*",
     "q": "1.0.x",
     "moment": "~2.7.0",
-    "typescript": "~1.0.1",
-    "mongoose": ""
+    "typescript": "~1.0.1"
   },
   "scripts": {
     "test": "mocha"
