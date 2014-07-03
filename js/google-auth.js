@@ -19,11 +19,22 @@ module.exports = function(ExpressApp, Database){
 	  },
 	  function(identifier, profile, done) {
 	  	User.then(function(c){
-	    	c.findAndModify({ openId: identifier }, [], { $set: {
-		    	openId: identifier,
-		    	"profile.emails": profile.emails,
-		    	"profile.name": profile.name, 	
-		    }}, { upsert: true, new: true }, function(err, user) {
+	    	c.findAndModify({ $or: [
+	    		{ openId: identifier }, 
+	    		{ "profile.emails": profile.emails }
+	    	]}, [], { 
+	    		$set: {
+		 			lastLogin: new Date,
+		    	}, 
+		    	$addToSet: { 
+		    		openId: identifier,
+		    		"profile.emails": { $each: profile.emails },
+		    	},
+		    	$setOnInsert: {
+			    	createdAt: new Date,
+			    	"profile.name": profile.name, 
+			    }
+			}, { upsert: true, new: true }, function(err, user) {
 		      done(err, user);
 		    })
 	  	})

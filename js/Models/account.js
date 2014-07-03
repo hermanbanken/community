@@ -24,7 +24,7 @@ module.exports = function(Database){
 
 	Account.find = function(query){
 		return utils.find.bind(utils, Database, 'accounts', Account).apply(arguments).then(function(accounts){
-			return [accounts, Cache.getOrElse('saldos', utils.saldos.bind(Database))];
+			return [accounts, Cache.getOrElse('saldos', utils.saldos.bind(utils, Database))];
 		}).spread(function(list, saldos){
 			return list.map(function(i){ 
 				var v,u = new Account(i);

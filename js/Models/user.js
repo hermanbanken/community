@@ -16,8 +16,6 @@ module.exports = function(Database){
 
 			this[n] = o[n];
 		}
-
-		this.tags = this.tags || [];
 	}
 
 	User.byId = function(id){
@@ -26,7 +24,7 @@ module.exports = function(Database){
 
 	User.find = function(query){
 		return utils.find.bind(utils, Database, 'users', User).apply(arguments).then(function(users){
-			return [users, Cache.getOrElse('saldos', utils.saldos.bind(Database))];
+			return [users, Cache.getOrElse('saldos', utils.saldos.bind(utils, Database))];
 		}).spread(function(list, saldos){
 			return list.map(function(i){ 
 				var v,u = new User(i);

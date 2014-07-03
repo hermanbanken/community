@@ -2,7 +2,21 @@
 .euro-col { min-width: 80px; text-align: right; }
 .euro {
   text-align: right;
+  &[value^="-"] { color: red; }
   &:after { content: "\20AC"; padding-left: .3em; float: right }
+}
+
+html table tr td.euro {
+	position: relative;
+	padding-right: 1.3em;
+	overflow-x: hidden;
+	&:after { position: absolute; right: .5em; }
+	input[type='number']{
+		margin-left: -2em;
+		&::-webkit-inner-spin-button, 
+		&::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0 }
+	}
+	
 }
 
 .bill .h2 { margin-top: 20px; margin-bottom: 10px; }

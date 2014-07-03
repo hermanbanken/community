@@ -9,21 +9,28 @@
 <div class="container">
   <div class="row">
     <div class="col-md-9">
-        <h2>{{t 'Users'}}</h2>
+        <h2>{{t 'Accounts overview'}}</h2>
         <div class="table-wrap">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover table-bordered">
                 <thead><tr>
-                  <th>{{t 'User'}}</th>
-                  <th>{{t 'Email'}}</th>
-                  <th>{{t 'Tags'}}</th>
-                  <th class='euro-col'>{{t 'Balance'}}</th>
+                  <th>{{t 'Date'}}</th>
+                  <th>{{t 'What'}}</th>
+                  {{#each accounts}}
+                  <th class='euro-col'>&Delta; {{this.name}}</th>
+                  {{/each}}
+                  {{#each accounts}}
+                  <th class='euro-col'>{{this.name}}</th>
+                  {{/each}}
                 </tr></thead>
-                {{#each users}}
+                {{#each bills}}
                 <tr>
-                  <td><a href="/users/{{_id}}">{{name profile}}</a></td>
-                  <td>{{#each profile.emails}}{{#if @index}}, {{/if}}{{this.value}}{{/each}}</td>
-                  <td>{{#each tags}}<span class='tag badge'>{{this}}</span> {{/each}}</td>
-                  <td class='euro' value="{{currency saldo}}">{{currency saldo}}</td>
+                  <td>{{datef date 'll'}}</td>
+                  <td><a href="/bills/{{_id}}">{{this.title}}</a></td>
+                  {{#each ../accounts}}
+                  <td class='euro' value="{{currency (changeFor .. _id)}}">{{currency (changeFor .. _id)}}</td>
+                  {{/each}}
+                  {{#each ../accounts}}
+                  <td class='euro' value="">...</td>{{/each}}
                 </tr>
                 {{/each}}
             </table>

@@ -14,21 +14,21 @@
         {{else}}
         <div class="form-group">
           <label for="givenName">{{t 'Given name'}}</label>
-          <input name="profile.name.givenName" id="givenName" class="form-control" placeholder="{{t 'Given name'}}" value="{{profile.name.givenName}}"  required />
+          <input name="profile[name][givenName]" id="givenName" class="form-control" placeholder="{{t 'Given name'}}" value="{{profile.name.givenName}}"  required />
         </div>
         <div class="form-group">
           <label for="familyName">{{t 'Family name'}}</label>
-          <input name="profile.name.familyName" id="familyName" class="form-control" placeholder="{{t 'Family name'}}" value="{{profile.name.familyName}}" required />
+          <input name="profile[name][familyName]" id="familyName" class="form-control" placeholder="{{t 'Family name'}}" value="{{profile.name.familyName}}" required />
         </div>
         {{/isEqual}}
         <div class="form-group">
           <label for="displayName">{{#isEqual type to='fund'}}{{t 'Fund name'}}{{else}}{{t 'Display name'}}{{/isEqual}}</label>
-          <input name="profile.name.displayName" id="displayName" class="form-control" placeholder="{{t 'Display name'}}" value="{{profile.name.displayName}}" />
+          <input name="profile[displayName]" id="displayName" class="form-control" placeholder="{{t 'Display name'}}" value="{{profile.displayName}}" />
         </div>
         {{#each profile.emails}}
         <div class="form-group">
           <label for="email_{{@index}}">{{t 'Emails'}}</label>
-          <input id="email_{{@index}}" class="form-control" name="profile.emails[{{@index}}].value" placeholder="{{t 'user@example.org'}}" value="{{this.value}}" />
+          <input id="email_{{@index}}" class="form-control" name="profile[emails][{{@index}}][value]" placeholder="{{t 'user@example.org'}}" value="{{this.value}}" />
         </div>
         {{/each}}
         <div class="form-group">
@@ -40,9 +40,7 @@
   	      </select>
         </div>
         <button type="submit" class="btn btn-default">{{t 'Save'}}</button>
-        {{#if _id}}
-        <a data-action='remove' class="btn btn-danger pull-right">{{t 'Delete'}}</a>
-        {{else}}
+        {{#if _id}}{{else}}
         <a href='javascript:history.back()' class="btn btn-danger pull-right">{{t 'Cancel'}}</a>
         {{/if}}
     </div>

@@ -3,11 +3,13 @@ var package = require("../package.json")
 var lib = require('./lib')
 var _ = require("underscore")
 var underscore = require("underscore")
+var express = require("express")
 var BSON = require('mongodb').BSONPure;
 
 // Register end-points that serve both json and html
 module.exports = function(ExpressApp, Database){
 	var app = ExpressApp,
+		router = express.Router(),
 		User = Database.then(function(_){
 			return _.collection('users');
 		}),
@@ -15,24 +17,35 @@ module.exports = function(ExpressApp, Database){
 		Bill = require('./Models/bill')(Database),
 		Account = require('./Models/account')(Database)
 
+	app.use('/users', router);
 
-	app.get('/users', function(req, res){
+	// Gets
+	router.get('/', handleIndex);
+	router.get('/:id', handleSingleUser)
+	// Create new user
+	router.post('/', lib.Authenticated, handleUserSave)
+	// Modify existing user
+	router.put('/:id', lib.Authenticated, lib.WithData, handleUserSave)
+	router.post('/:id', lib.Authenticated, handleUserSave)
+
+	function handleIndex(req, res, next){
 		Q.all([User.find(), Account.find()]).spread(function(users, accounts){
 			res.render('users', {
 				title: 'Users',
 				users: users,
 				accounts: accounts,
 			});
-		}, function(err){
-			console.error(err.stack);
-			res.send(500);
-		})
-	})
+		}).fail(next)
+	}
 
-	app.get('/users/:id', function(req, res){
+	function handleSingleUser(req, res, next){
+		// Query only bills that the user is involved in
+		var bq = { };
+		bq["changes."+req.params.id] = { $exists: true, $ne: 0 };
+		
 		Q.all([
 			User.byId(req.params['id']), 
-			Bill.find({ changes: {$elemMatch: req.params['id']}})
+			Bill.find(bq)
 		]).spread(function(user, bills){
 			if(req.accepts('html','json') == 'html')	
 				res.render('user-form', {
@@ -45,35 +58,19 @@ module.exports = function(ExpressApp, Database){
 			else	
 				res.redirect(201, '/users/'+id)
 			
-		}).catch(function(err){
-			console.error(err.stack);
-			res.send(500);
-		})
-	})
+		}).fail(next)
+	}
 
-	// Create new bill
-	app.post('/users', handleUserSave)
-	// Modify existing bill
-	app.put('/users/:id', lib.WithData, handleUserSave)
-	app.post('/users/:id', /*lib.Authenticated, */ handleUserSave)
-
-	function handleUserSave(req, res){
-		User.byId(req.body.id).then(function(user){ 
+	function handleUserSave(req, res, next){
+		User.byId(req.param.id || req.body.id).then(function(user){ 
 			user.profile = req.body.profile;
-			console.log("Saving", user);
 			return user.save();
 		}).then(function(id){
-			console.log("Result from saving", id);
 			if(req.accepts('html','json') == 'html')	
 				res.redirect('/users/'+id)
 			else	
 				res.redirect(201, '/users/'+id)
-		}, function(err){
-			console.log("Error while saving");
-			console.error(err);
-			res.send(400, err.message);
-		});
-		
+		}).fail(next);		
 	}
 
 	/*app.post('/user', lib.Authenticated, lib.WithData, function(req, res){

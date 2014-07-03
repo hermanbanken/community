@@ -28,16 +28,11 @@ module.exports = function(Database){
 		}
 	}
 
-	Bill.byId = function(id){
-		return utils.findById(Database, 'bills', Bill, id);
-	}
-
-	Bill.find = function(query){
-		return utils.find.bind(utils, Database, 'bills', Bill).apply(arguments);
-	};
+	Bill.byId = utils.findById.bind(utils, Database, 'bills', Bill);
+	Bill.find = utils.find.bind(utils, Database, 'bills', Bill);
 
 	Bill.types = function(){
-		return ["standard", "drink", "activity", "gifts", "food"];
+		return ["standard", "deposit", "activity"];
 	}
 
 	Bill.prototype.validate = function(){
@@ -51,6 +46,7 @@ module.exports = function(Database){
 	};
 
 	Bill.prototype.save = function(){
+		console.log("Saving bill", JSON.stringify(Database))
 		return utils.saveModel(Database, 'bills', this)
 			.then(function(id){	
 				Cache.clear('saldos');

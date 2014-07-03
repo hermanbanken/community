@@ -56,6 +56,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['uglify','typescript','watch']);
+  grunt.registerTask('default', ['uglify','less','typescript','watch']);
 
 };

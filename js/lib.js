@@ -4,7 +4,11 @@ exports.Authenticated = function Authenticated(req, res, next){
 	if(req.isAuthenticated()){
 		return next();
 	}
+
 	console.warn("Not authenticated");
+
+	if(true)
+		next();
 
 	if(req.accepts('html'))
 		res.redirect('/');
@@ -20,11 +24,17 @@ exports.WithMenu = function(req, res, next){
 		},{
 			path: '/users',
 			title: "Saldi",
+		},{
+			path: '/accounts',
+			title: "Bigbook",
 		}];
 	next();
 };
 
 exports.ViewHelpers = {
+	lookup: function(list, key){
+		return list && typeof list == 'object' && list[key];
+	},
 	isEqual: function(a, options){
 		if(options.hash.to === a)
 			return options.fn(this);
@@ -38,10 +48,10 @@ exports.ViewHelpers = {
 	    return moment(date).format(format);
 	},
  	currency: function(number){
-	    return (typeof number == 'number' || !isNaN(number)) && number.toFixed(2) || "";
+	    return (typeof number == 'number' || !isNaN(number)) && (number/100).toFixed(2) || "";
 	},
-	name: function(name){
-		return name && name.givenName + " " + name.familyName;
+	name: function(profile){
+		return profile.displayName || profile.name && profile.name.givenName + " " + profile.name.familyName;
 	},
 	stringify: JSON.stringify,
 	t: function(key){

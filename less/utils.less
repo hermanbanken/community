@@ -33,15 +33,25 @@
   display: inherit;
   font-size: inherit;
   font-weight: inherit;
-  border-width: 0;
+  border: none;
   height: inherit;
   width: inherit;
   box-shadow: none;
   padding: inherit;
-  background-color: inherit;
-  &:hover, &:focus {
+  background-color: transparent;
+  outline: none;
+  -webkit-appearance: none;
+  /*&:hover, &:focus {
     margin: -1px;
     border-width: 1px;
-  }
+  }*/
 }
 .i18n .seamless { padding: 0; }
+.table .seamless { width: 100%; padding: 0 }
+.table .euro .seamless { width: 100%; display: inline; }
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

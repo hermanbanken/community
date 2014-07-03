@@ -14,7 +14,7 @@
       <td><a href="/bills/{{_id}}">{{datef date 'll'}}</a></td>
       <td>{{type}}</td>
       <td>{{title}}</td>
-      <td class='euro'>{{currency (changeFor this ../user._id)}}</td>
+      <td class='euro' value="{{currency (changeFor this ../user._id)}}">{{currency (changeFor this ../user._id)}}</td>
     </tr>
     {{/each}}
   </table>

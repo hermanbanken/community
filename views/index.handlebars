@@ -12,8 +12,8 @@
               </tr></thead>
               {{#each users}}
               <tr>
-                <td><a href="/users/{{_id}}">{{name profile.name}}</a></td>
-                <td class='euro'>{{currency saldo}}</td>
+                <td><a href="/users/{{_id}}">{{name profile}}</a></td>
+                <td class='euro' value="{{currency saldo}}">{{currency saldo}}</td>
               </tr>
               {{/each}}
           </table>

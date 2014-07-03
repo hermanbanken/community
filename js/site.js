@@ -10,7 +10,6 @@ var Handlebars = hbrs.create({
 })
 
 Handlebars.loadPartials(function (err, partials) {
-    console.log(partials);
     // => { 'foo.bar': [Function],
     // =>    title: [Function] }
 })
@@ -18,12 +17,12 @@ Handlebars.loadPartials(function (err, partials) {
 module.exports = function Site(ExpressApp, Database){
 	var app = ExpressApp;
 	
-	app.configure(function() {
-	  app.engine('handlebars', Handlebars.engine);
-	  app.set('view engine', 'handlebars');
-	  app.set('views', __dirname+'/../views');
-	  app.use(partials());
-	})
+	app.engine('handlebars', Handlebars.engine);
+	app.set('view engine', 'handlebars');
+	app.set('views', __dirname+'/../views');
+	app.use(partials());
+
+	console.log("Db", Database, JSON.stringify(Database));
 
 	var User = require('./Models/user')(Database),
 		Bill = require('./Models/bill')(Database);
@@ -32,7 +31,7 @@ module.exports = function Site(ExpressApp, Database){
 	app.all('*', lib.WithMenu);
 	app.all('*', lib.WithFlash);
 
-	app.get('/', function(req, res){
+	app.get('/', function(req, res, next){
 		// Load data
 		Q.all([Bill.find(), User.find()]).spread(function(bills, users){
 			res.render('index', {
@@ -40,9 +39,7 @@ module.exports = function Site(ExpressApp, Database){
 				bills: bills,
 				users: users,
 			});
-		}).catch(function(erro){
-			console.log(erro);
-		});
+		}).fail(next);
 	})
 
 	app.post('/signin', function(req, res){

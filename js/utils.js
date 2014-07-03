@@ -17,6 +17,8 @@ function ensureOID(id, nullIsNew){
 	}
 }
 function dbCollection(dbQ, collectionName){
+	if(!dbQ)
+		throw new Error("Without database we can't do anything");
 	if(dbQ.then)
 		return dbQ.then(function(_){
 			return _.collection(collectionName)
@@ -64,7 +66,7 @@ module.exports = {
 	},
 
 	find: function find(db, collection, modelType){
-		var args = Array.prototype.slice(arguments, 3);
+		var args = Array.prototype.slice.call(arguments, 3);
 		return dbCollection(db, collection).then(function(_){
 			return Q.nfcall(_.find.apply(_, args).toArray.bind(_));
 		}).then(function(list){
@@ -73,6 +75,8 @@ module.exports = {
 	},
 
 	saveModel: function saveModel(db, collection, model){
+		var id = ensureOID(model._id);
+
 		return Q.fcall(function () {
 			// validate
 			if(model.validate() !== true)
@@ -87,12 +91,15 @@ module.exports = {
 					$set: _.clone(model), 
 					$setOnInsert: { createdAt: new Date }
 				},
-				id = ensureOID(id),
 				query = { _id: id };
+			
+			delete doc['$set'].createdAt;
 			delete doc['$set']._id;
 
 			// Execute update	
-			return Q.nfcall(mongo.findAndModify.bind(_, query, [], doc, { upsert: true }))
+			return Q.nfcall(mongo.findAndModify.bind(mongo, query, [], doc, { upsert: true }))
+		}).then(function(result){
+			return id;
 		})
 	}
 };

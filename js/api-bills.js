@@ -2,19 +2,16 @@ var Q = require('q')
 var package = require("../package.json")
 var lib = require('./lib')
 var _ = require("underscore")
+var express = require("express")
 var BSON = require('mongodb').BSONPure;
 
 // Register end-points that serve both json and html
 var exports = function(ExpressApp, Database){
 	var app = ExpressApp,
-		User = Database.then(function(_){
-			return _.collection('users');
-		}),
+		router = express.Router(),
+		User = require('./Models/user')(Database),
 		Bill = require('./Models/bill')(Database),
-		Account = require('./Models/account')(Database),
-		Accounts = Database.then(function(_){
-			return _.collection('accounts')
-		})
+		Account = require('./Models/account')(Database)
 
 	function all(){
 		return Bill.then(function(_){
@@ -22,17 +19,18 @@ var exports = function(ExpressApp, Database){
 		});
 	}
 
-	app.get('/bills', index.bind(this, all))
+	app.use('/bills', router);
 
-	app.get('/bills/:id', single)
-	
+	// Gets
+	router.get('/', index.bind(this, all));
+	router.get('/:id', single)
 	// Create new bill
-	app.post('/bills', handleBillSave)
+	router.post('/', handleBillSave)
 	// Modify existing bill
-	app.put('/bills/:id', handleBillSave)
-	app.post('/bills/:id', handleBillSave)
+	router.put('/:id', handleBillSave)
+	router.post('/:id', handleBillSave)
 
-	function index(all, req, res){
+	function index(all, req, res, next){ 
 		var bills = Bill.find().then(function(bills){
 			if(req.accepts('html','json') == 'html')		
 				res.render('bills', {
@@ -41,14 +39,11 @@ var exports = function(ExpressApp, Database){
 				});
 			else 
 				res.send(200, bills);
-		}).catch(function(err){
-			console.log(err);
-			res.send(500, "An error occured");
-		});
+		}).fail(next);
 	}
 
 
-	function handleBillSave(req, res){
+	function handleBillSave(req, res, next){
 		(new Bill(req.body)).save().then(function(id){
 			if(typeof id == 'undefined')
 				throw new Error();
@@ -57,19 +52,14 @@ var exports = function(ExpressApp, Database){
 				res.redirect('/bills/'+id)
 			else	
 				res.redirect(201, '/bills/'+id)
-		}).catch(function(err){
-			res.send(400, err.message);
-		})
+		}).fail(next)
 	}
 
 	function single(req, res, next){
 		if(!req.params['id'])
 			return next();
 
-		var users = User.then(function(_){
-			return Q.nfcall(_.find().toArray.bind(_));
-		});
-
+		var users = User.find();
 		var accounts = Account.find();
 
 		var bill = req.params['id'] == 'create' ? { bill : new Bill() } : Bill.byId(req.params['id']);
@@ -85,10 +75,7 @@ var exports = function(ExpressApp, Database){
 				})
 			else
 				res.send(200, bill);
-		}).catch(function(err){
-			console.error(err);
-			res.send(500);
-		});
+		}).fail(next);
 	}
 }
 
