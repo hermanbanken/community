@@ -48,7 +48,7 @@ function start(db)
 	console.log("Started on port "+(process.env.PORT || package.config.port));
 }
 
-dbPromise.then(start);
+dbPromise.then(start).fail(console.error);
 
 // Make statics cachable on production
 /*	var oneYear = 31557600000;
