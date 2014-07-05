@@ -3,9 +3,9 @@
 <form role="form" method="post" action="/bills/{{#if _id}}{{_id}}{{/if}}">
 <div class="container">
   <div class="row">
-  	<div class="col-md-3">
+  	<div class="col-md-4">
       <h2 style="margin-bottom: .5cm">
-        {{#if _id}}Edit bill{{else}}Create bill{{/if}}
+        {{#if _id}}{{t 'Edit bill'}}{{else}}{{t 'Create bill'}}{{/if}}
         <button type="submit" class="btn btn-xs btn-default">{{t 'Save'}}</button>
         {{#if _id}}
         <input type="hidden" name="_id" value="{{_id}}" /> 
@@ -40,7 +40,7 @@
       </div>
     </div>
     <!-- Bill editor -->
-    <div class="col-md-9" style="padding-top: 0.5cm">
+    <div class="col-md-8" style="padding-top: 0.5cm">
 
       {{#each ../users}}
       <input data-type="change" type="hidden" name="changes[{{_id}}]" value="{{lookup ../changes _id}}" />
