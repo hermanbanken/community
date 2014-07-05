@@ -23,7 +23,11 @@ module.exports = function(Database){
 	}
 
 	User.find = function(query){
-		return utils.find.bind(utils, Database, 'users', User).apply(arguments).then(function(users){
+		var promise = utils.findAndSort.bind(utils, Database, 'users', User).call(utils, arguments, [{ 
+			"tags.0": -1, 
+			"displayName": 1 
+		}]);
+		return promise.then(function(users){
 			return [users, Cache.getOrElse('saldos', utils.saldos.bind(utils, Database))];
 		}).spread(function(list, saldos){
 			return list.map(function(i){ 
