@@ -19,7 +19,7 @@
     "socket.io": "1.0.6",
     "underscore": "1.5.x",
     "passport": "*",
-    "passport-google": "*",
+    "passport-google-oauth": "*",
     "q": "1.0.x",
     "moment": "~2.7.0",
     "typescript": "~1.0.1",
@@ -46,7 +46,11 @@
   "config": {
   	"port": 3000,
     "hostname": "community.org",
-    "mongouri": "mongodb://localhost/community"
+    "mongouri": "mongodb://localhost/community",
+    "google": {
+      "clientid": "<client id here>",
+      "secret": "<secret here>"
+    }
   },
   "license": "MIT"
 }

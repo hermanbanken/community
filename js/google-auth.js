@@ -1,6 +1,6 @@
 var Q = require('q'),
 	passport = require('passport'),
-	GoogleStrategy = require('passport-google').Strategy,
+	GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 	package = require("../package.json"),
 	ObjectId = require('mongodb').ObjectID;
 
@@ -14,10 +14,12 @@ module.exports = function(ExpressApp, Database){
 	var port = process.env.HEROKU_PUBLIC_PORT || process.env.PORT || package.config.port || 80;
 
 	passport.use(new GoogleStrategy({
-	    returnURL: 'http://'+hostname+':'+port+'/auth/google/return',
-	    realm: 'http://'+hostname+':'+port+'/'
+	    clientID: process.env.GOOGLE_CLIENTID || package.config.google.clientid,
+	    clientSecret: process.env.GOOGLE_SECRET || package.config.google.secret,
+	    callbackURL: 'http://'+hostname+':'+port+'/auth/google/return',
 	  },
-	  function(identifier, profile, done) {
+	  function(identifier, other, profile, done) {
+	  	console.log("OAauth login", arguments);
 	  	User.then(function(c){
 	    	c.findAndModify({ $or: [
 	    		{ openId: identifier }, 
@@ -54,8 +56,7 @@ module.exports = function(ExpressApp, Database){
 	});
 
 	app.get('/auth/google', function(req, res, next){
-	  return passport.authenticate('google')(req, res, function(e){
-	    console.log("Return from Google");
+	  return passport.authenticate('google', { scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile' })(req, res, function(e){
 	    next();
 	  });
 	});
