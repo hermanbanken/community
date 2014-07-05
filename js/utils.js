@@ -13,7 +13,7 @@ function ensureOID(id, nullIsNew){
 	try {
 		return new BSON.ObjectID(id);
 	} catch(e){
-		console.log("Not an ID", id, typeof id);
+		console.warn("Not an ID", id, typeof id);
 	}
 }
 function dbCollection(dbQ, collectionName){

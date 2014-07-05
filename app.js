@@ -11,9 +11,10 @@ var Q = require('q'),
 	expressSession = require("express-session"),
 	MongoStore = require('connect-mongo')(expressSession);
 
+console.info("Connecting to mongodb "+process.env.MONGO_URI || package.config.mongouri);
 var dbPromise = Q.nfcall(
     MongoClient.connect,
-    process.env.MONGOLAB_URI || package.config.mongouri);
+    process.env.MONGO_URI || package.config.mongouri);
 
 function start(db)
 {
@@ -45,7 +46,7 @@ function start(db)
 
 	/** Start the server **/
 	server.listen(process.env.PORT || package.config.port);
-	console.log("Started on port "+(process.env.PORT || package.config.port));
+	console.info("Started on port "+(process.env.PORT || package.config.port));
 }
 
 dbPromise.then(start).fail(console.error);
@@ -57,7 +58,7 @@ dbPromise.then(start).fail(console.error);
 */
 
 if(require.main === module) {
-	console.log("Starting Community API and site on port "+(process.env.PORT || package.config.port));
+	console.log("Starting Community API and site on port "+(process.env.PORT || package.config.port)+ " using hostname '"+(process.env.HOSTNAME || package.config.hostname)+"'");
 } else {
 	exports.community = Q.all(db);
 	exports.express = app;

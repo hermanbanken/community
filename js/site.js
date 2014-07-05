@@ -22,8 +22,6 @@ module.exports = function Site(ExpressApp, Database){
 	app.set('views', __dirname+'/../views');
 	app.use(partials());
 
-	console.log("Db", Database, JSON.stringify(Database));
-
 	var User = require('./Models/user')(Database),
 		Bill = require('./Models/bill')(Database);
 

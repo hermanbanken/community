@@ -76,37 +76,4 @@ module.exports = function(ExpressApp, Database){
 		}).fail(next);		
 	}
 
-	/*app.post('/user', lib.Authenticated, lib.WithData, function(req, res){
-		if(req.body && req.body.profile && req.body.profile.displayName)
-			req.user.profile.displayName = req.body.profile.displayName;
-	
-		var doc = {
-			profile: req.user.profile,
-		}
-	
-		console.info("Updating user", req.user._id, doc);
-	
-		User.then(function(_){
-			return Q.nfcall(_.update.bind(_, { _id: req.user._id }, {$set: doc}));
-		}).then(function(result){
-			if(req.accepts('html','json') == 'html')
-				res
-					.flashing('success', 'We\'ve updated your settings', 'setting')
-					.redirect('/user');
-			else 
-				res.send(200, "");
-		}).catch(function(err){
-			console.log(err);
-			res
-    			.flashing('error', 'Something went wrong', 'bug')
-				.send(500, "Something went wrong");
-		})
-	})*/
-
-	app.get('/users', function(req, res){
-		res.render('index', {
-			title: 'Users',
-		});
-	})
-
 }
