@@ -20,7 +20,11 @@
       </div>
       <div class="form-group">
         <label for="date">{{t 'Date'}}</label>
-        <input name="date" type="date" class="form-control" id="date" placeholder="Datum" value="{{datef date 'YYYY-MM-DD'}}" />
+        <input name="date" type="date" class="form-control" id="date" placeholder="{{t 'Date'}}" value="{{datef date 'YYYY-MM-DD'}}" />
+      </div>
+      <div class="form-group">
+        <label for="date">{{t 'Pay Date'}}</label>
+        <input name="paydate" type="date" class="form-control" id="paydate" placeholder="{{t 'Pay Date'}}" value="{{#if paydate}}{{datef paydate 'YYYY-MM-DD'}}{{/if}}" />
       </div>
       <div class="form-group">
         <label for="note">{{t 'Note'}}</label>
@@ -49,63 +53,15 @@
       </ul>
       <!-- Tab panes -->
       <div class="tab-content" id="bill-type-tabs">
-        <div class="tab-pane active" id="standard">
-
-          <div class="table-wrap" style="margin-top:1em">
-            <table class="table table-striped table-hover table-condensed table-bordered">
-                <thead><tr>
-                  {{#each ../accounts}}
-                  <th>&Delta; {{this.name}}</th>
-                  {{/each}}
-                </tr></thead>
-                <tr>
-                  {{#each ../accounts}}
-                  <td class="euro" data-account="{{_id}}">
-                    <input data-type="cost-visual" class="seamless euro" type="number" step="0.01" value="{{currency (changeFor .. _id)}}" />
-                  </td>
-                  {{/each}}
-                </tr>
-            </table>
-          </div>
-
-          <div class="table-wrap" style="margin-top:1em">
-            <table class="table table-striped table-hover table-condensed table-bordered">
-                <thead><tr>
-                  <th>{{t 'User'}}</th>
-                  <th style="width:100px">{{t 'Aanwezig'}}</th>
-                  <th style="width:100px">{{t 'Persoonlijk'}}</th>
-                  <th style="width:100px">&Delta; {{t 'Saldo'}}</th>
-                </tr></thead>
-                {{#each ../users}}
-                <tr data-type="user" data-user="{{_id}}">
-                  <td class="truncate">
-                    {{name profile}}
-                    <input data-type="personal" type="hidden" name="personal[{{_id}}]" value="{{lookup ../personal _id}}"  />
-                  </td>
-                  <td>
-                    <input data-type="presence" class="seamless" type="number" step="0.5"
-                    name="presence[{{_id}}]" value="{{lookup ../presence _id}}" />
-                  </td>
-                  <td class="euro">
-                    <input data-type="personal-visual" class="seamless euro" type="number"
-                    value="{{currency (lookup ../personal _id)}}" step="0.01" />
-                  </td>
-                  <td class="euro">
-                    <input data-type="change-visual" class="seamless euro" type="number" disabled="true" value="{{currency (lookup ../changes _id)}}" />
-                  </td>
-                </tr>
-                {{/each}}
-                <tfoot><tr>
-                  <th class="truncate">Totalen</th>
-                  <td data-type="total-presence"></td>
-                  <td data-type="total-personal" class="euro"></td>
-                  <td data-type="total-changes" class="euro"></td>
-                </tr></foot>
-            </table>
-          </div>
+        <div class="tab-pane {{#isEqual type to='standard'}}active{{/isEqual}}" id="standard">
+          {{#with ..}}{{>bill-standard-entry}}{{/with}}
         </div>
-        <div class="tab-pane" id="deposit">1 persoon</div>
-        <div class="tab-pane" id="activity">multi invoer</div>
+        <div class="tab-pane active {{#isEqual type to='deposit'}}active{{/isEqual}}" id="deposit">
+          {{#with ..}}{{>bill-deposit-entry}}{{/with}}
+        </div>
+        <div class="tab-pane {{#isEqual type to='activity'}}active{{/isEqual}}" id="activity">
+          {{#with ..}}{{>bill-activity-entry}}{{/with}}
+        </div>
       </div>
 
       <hr />

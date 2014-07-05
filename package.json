@@ -22,7 +22,9 @@
     "passport-google": "*",
     "q": "1.0.x",
     "moment": "~2.7.0",
-    "typescript": "~1.0.1"
+    "typescript": "~1.0.1",
+    "mongo-store": "",
+    "connect-mongo": ""
   },
   "scripts": {
     "test": "mocha"

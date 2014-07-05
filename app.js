@@ -6,24 +6,49 @@ var Q = require('q'),
 	passport = require('passport'),
 	package = require("./package.json"),
 	partials = require("express-partials"),
-	MongoClient = require('mongodb').MongoClient;
+	MongoClient = require('mongodb').MongoClient,
+	bodyParser = require("body-parser"),
+	expressSession = require("express-session"),
+	MongoStore = require('connect-mongo')(expressSession);
 
-var db = Q.nfcall(
+var dbPromise = Q.nfcall(
     MongoClient.connect,
     process.env.MONGOLAB_URI || package.config.mongouri);
 
-app
-  .use(require("body-parser")())
-  .use(require("cookie-parser")())
-  .use(require("express-session")({ secret: 'changeme'} ))
-  .use(passport.initialize())
-  .use(passport.session());
+function start(db)
+{
+	app
+	  .use(bodyParser.urlencoded({ extended: true }))
+	  .use(bodyParser.json())
+	  .use(require("cookie-parser")())
+	  .use(expressSession({ 
+	  	secret: 'changeme', 
+	  	saveUninitialized: true, 
+	  	resave: true,
+	  	store: new MongoStore({ db: db })
+	  }))
+	  .use(passport.initialize())
+	  .use(passport.session());
 
-require("./js/site")(app, db);
-require("./js/google-auth")(app, db);
-require("./js/api-users")(app, db);
-require("./js/api-bills")(app, db);
-require("./js/api-accounts")(app, db);
+	require("./js/site")(app, dbPromise);
+	require("./js/google-auth")(app, dbPromise);
+	require("./js/api-users")(app, dbPromise);
+	require("./js/api-bills")(app, dbPromise);
+	require("./js/api-accounts")(app, dbPromise);
+
+	// Default error handler
+	app.use(function errorHandler(err, req, res, next) {
+	  res.send(500, err);
+	})
+
+	app.use(express.static(__dirname + '/public'));
+
+	/** Start the server **/
+	server.listen(process.env.PORT || package.config.port);
+	console.log("Started on port "+(process.env.PORT || package.config.port));
+}
+
+dbPromise.then(start);
 
 // Make statics cachable on production
 /*	var oneYear = 31557600000;
@@ -31,21 +56,8 @@ require("./js/api-accounts")(app, db);
 	app.use(express.errorHandler());
 */
 
-app.use(express.static(__dirname + '/public'));
-
-// Default error handler
-app.use(function errorHandler(err, req, res, next) {
-  res.send(500, err);
-})
-
-/** Start the server **/
-server.listen(process.env.PORT || package.config.port);
-
 if(require.main === module) {
 	console.log("Starting Community API and site on port "+(process.env.PORT || package.config.port));
-	db.then(function(){
-		console.log("Started on port "+(process.env.PORT || package.config.port))
-	})
 } else {
 	exports.community = Q.all(db);
 	exports.express = app;

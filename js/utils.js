@@ -35,19 +35,37 @@ module.exports = {
 
 	toDict: function toDict(input, keyF, valueF){
 		var ret = {};
-		for(n in input){
+		if(input)
+		for(var n in input){
 			ret[keyF(n)] = valueF(input[n]);
 		}
 		return ret;
+	},
+
+	dictFilter: function(input, keyF, valueF){
+		var ret = {};
+		if(input)
+		for(var n in input){
+			if(typeof keyF == 'function' && !keyF(n) || typeof valueF == 'function' && !valueF(input[n]))
+				continue;
+			ret[n] = input[n];
+		}
+		return ret;
+	},
+
+	sum: function(list){
+		return _.reduce(list, function(memo, num){ return memo + num; }, 0);
 	},
 
 	saldos: function saldos(dbQ){
 		return dbCollection(dbQ, 'bills').then(function(c){
 			return Q.nfcall(c.mapReduce.bind(c), function(){
 				for(n in this.changes)
-					emit(n, this.changes[n]);
+					if(typeof this.changes[n] == 'number' && !isNaN(this.changes[n]))
+						emit(n, this.changes[n]);
 				for(n in this.balances)
-					emit(n, this.balances[n]);
+					if(typeof this.balances[n] == 'number' && !isNaN(this.balances[n]))
+						emit(n, this.balances[n]);
 			}, function(key, values){
 				return Array.sum(values);
 			}, {

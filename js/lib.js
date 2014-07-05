@@ -5,13 +5,12 @@ exports.Authenticated = function Authenticated(req, res, next){
 		return next();
 	}
 
-	console.warn("Not authenticated");
-
-	if(true)
-		next();
+	// console.warn("Not authenticated");
+	// if(true)
+	// 	return next();
 
 	if(req.accepts('html'))
-		res.redirect('/');
+		res.redirect('/login');
 	else 
 		res.send(401, "");
 }
@@ -74,13 +73,14 @@ exports.ViewHelpers = {
 			return s + " second" + (s == 1 ? '' : 's') + " ago";
 		}
 	},
-	gravatar: function(email){
-		return "";
-	},
 
 	changeFor: function(bill, user){
 		return bill.changes && bill.changes[user] || bill.balances && bill.balances[user] || 0;
-	}
+	},
+
+	gravatar: function(email){
+		return "";
+	},
 
 };
 

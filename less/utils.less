@@ -50,6 +50,29 @@
 .table .seamless { width: 100%; padding: 0 }
 .table .euro .seamless { width: 100%; display: inline; }
 
+.table td input[type=date].seamless {
+  width: 140px;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  line-height: 1em;
+}
+
+.has-feedback {
+  position:relative;
+  .feedback {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 2;
+    display: block;
+    width: 34px;
+    height: 100%;
+    line-height: 34px;
+    text-align: center;
+  }
+}
+
 .truncate {
   white-space: nowrap;
   overflow: hidden;

@@ -43,6 +43,8 @@ module.exports = function(Database){
 	};
 
 	User.prototype.save = function(){
+		if(!this.profile)
+			throw new Error("User must have a profile");
 		return utils.saveModel(Database, 'users', this)	
 	};
 

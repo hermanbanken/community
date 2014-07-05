@@ -1,0 +1,30 @@
+
+{{#with account}}
+<form role="form" method="post" action="/accounts/{{#if _id}}{{_id}}{{/if}}">
+<div class="container">
+  <div class="row">
+  	<div class="col-md-3">
+  		{{#if _id}}
+      <h2>{{t 'Edit account'}}</h2>
+      {{else}}
+      <h2>{{t 'Create account'}}</h2>
+      {{/if}}
+  	  <input type="hidden" name="id" value="{{_id}}" /> 
+      <div class="form-group">
+          <label for="name">{{t 'Name'}}</label>
+          <input name="name" id="name" class="form-control" placeholder="{{t 'Name'}}" value="{{this.name}}"  required />
+        </div>
+        <button type="submit" class="btn btn-default">{{t 'Save'}}</button>
+        {{#if _id}}{{else}}
+        <a href='javascript:history.back()' class="btn btn-danger pull-right">{{t 'Cancel'}}</a>
+        {{/if}}
+    </div>
+    <div class="col-md-9">
+      {{#with ..}}
+        {{> bills}}
+      {{/with}}
+    </div>
+  </div>
+</div>
+</form>
+{{/with}}

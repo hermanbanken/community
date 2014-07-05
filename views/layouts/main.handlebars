@@ -5,19 +5,27 @@
   <title>{{title}} - Vangboek</title>
   <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
   <meta name="viewport" content="width=device-width" />
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700' rel='stylesheet' type='text/css'>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/js/vendor/bootstrap-3.2.0/css/bootstrap.min.css" rel="stylesheet">
   <link href="/css/community.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 
   {{> menu}}
 
+  <ul data-role="template" data-suggest="users" class="suggest" style="display:none">
+  {{#each users}}
+    <li class="suggest-user" data-id="{{_id}}" data-tags="{{#each tags}}{{this}};{{/each}}">
+      <!--<img class="member-gravatar" src="{{gravatar profile}}" />-->
+      {{name profile}}
+    </li>
+  {{/each}}
+  </ul>
+
   {{{body}}}
   
   <script src="/js/vendor/jquery.min.js"></script>
   <script src="/js/vendor/underscore-min.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="/js/vendor/bootstrap-3.2.0/js/bootstrap.min.js"></script>
   <script src="/js/community.js"></script>
 </body>
 </html>

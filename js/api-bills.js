@@ -20,6 +20,7 @@ var exports = function(ExpressApp, Database){
 	}
 
 	app.use('/bills', router);
+	router.use(lib.Authenticated);
 
 	// Gets
 	router.get('/', index.bind(this, all));
@@ -44,9 +45,10 @@ var exports = function(ExpressApp, Database){
 
 
 	function handleBillSave(req, res, next){
-		(new Bill(req.body)).save().then(function(id){
+		var b = new Bill(req.body);
+		(b).save().then(function(id){
 			if(typeof id == 'undefined')
-				throw new Error();
+				throw new Error("No id!");
 			
 			if(req.accepts('html','json') == 'html')	
 				res.redirect('/bills/'+id)

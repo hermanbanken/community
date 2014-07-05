@@ -27,11 +27,11 @@ module.exports = function Site(ExpressApp, Database){
 	var User = require('./Models/user')(Database),
 		Bill = require('./Models/bill')(Database);
 
-	app.all('*', lib.WithUser);
-	app.all('*', lib.WithMenu);
-	app.all('*', lib.WithFlash);
+	app.use(lib.WithUser);
+	app.use(lib.WithMenu);
+	app.use(lib.WithFlash);
 
-	app.get('/', function(req, res, next){
+	app.get('/', lib.Authenticated, function(req, res, next){
 		// Load data
 		Q.all([Bill.find(), User.find()]).spread(function(bills, users){
 			res.render('index', {
@@ -41,6 +41,13 @@ module.exports = function Site(ExpressApp, Database){
 			});
 		}).fail(next);
 	})
+
+	app.get('/login', function(req, res){
+		res.render('login', {
+			title: 'Login',
+			providers: ['google']
+		});
+	});
 
 	app.post('/signin', function(req, res){
 		if(req.body && req.body.provider){

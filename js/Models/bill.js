@@ -10,7 +10,7 @@ module.exports = function(Database){
 		if(typeof o !== 'object')
 			return;
 
-		for(n in o){
+		for(var n in o){
 			if(!o.hasOwnProperty(n))
 				continue;
 			
@@ -20,7 +20,12 @@ module.exports = function(Database){
 			}
 
 			if(n == 'balances' || n == 'changes'){
-				this[n] = utils.toDict(o[n], utils.ensureOID, parseInt);
+				var r = utils.dictFilter(
+					utils.toDict(o[n], utils.ensureOID, parseInt), 
+					null,
+					function(v){ return typeof v == 'number' && !isNaN(v); }
+				);
+				this[n] = r;
 				continue;
 			}
 
@@ -46,7 +51,11 @@ module.exports = function(Database){
 	};
 
 	Bill.prototype.save = function(){
-		console.log("Saving bill", JSON.stringify(Database))
+		var diff = utils.sum(this.changes) - utils.sum(this.balances);
+
+		if(diff > this.changes.length || diff < -1 * this.changes.length)
+			throw new Error("Not entered correctly! Difficiency is " + diff + " cents");
+
 		return utils.saveModel(Database, 'bills', this)
 			.then(function(id){	
 				Cache.clear('saldos');

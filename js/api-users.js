@@ -18,15 +18,16 @@ module.exports = function(ExpressApp, Database){
 		Account = require('./Models/account')(Database)
 
 	app.use('/users', router);
+	router.use(lib.Authenticated)
 
 	// Gets
 	router.get('/', handleIndex);
 	router.get('/:id', handleSingleUser)
 	// Create new user
-	router.post('/', lib.Authenticated, handleUserSave)
+	router.post('/', handleUserSave)
 	// Modify existing user
-	router.put('/:id', lib.Authenticated, lib.WithData, handleUserSave)
-	router.post('/:id', lib.Authenticated, handleUserSave)
+	router.put('/:id', lib.WithData, handleUserSave)
+	router.post('/:id', handleUserSave)
 
 	function handleIndex(req, res, next){
 		Q.all([User.find(), Account.find()]).spread(function(users, accounts){

@@ -15,17 +15,19 @@ module.exports = function(ExpressApp, Database){
 		Account = require('./Models/account')(Database)
 
 	app.use('/accounts', router);
+	router.use(lib.Authenticated);
 
 	// Gets
 	router.get('/', handleIndex);
-	router.get('/:id', handleSingleUser)
+	router.get('/:id', handleSingleAccount)
 	// Create new account
-	router.post('/', lib.Authenticated, handleUserSave)
+	router.post('/', handleAccountSave)
 	// Modify existing account
-	router.put('/:id', lib.Authenticated, lib.WithData, handleUserSave)
-	router.post('/:id', lib.Authenticated, handleUserSave)
+	router.put('/:id', lib.WithData, handleAccountSave)
+	router.post('/:id', handleAccountSave)
 
 	function handleIndex(req, res, next){
+		console.log("Index");
 		Q.all([User.find(), Bill.find(), Account.find()]).spread(function(users, bills, accounts){
 			res.render('accounts', {
 				title: 'Accounts',
@@ -36,30 +38,29 @@ module.exports = function(ExpressApp, Database){
 		}).fail(next)
 	}
 
-	function handleSingleUser(req, res, next){
+	function handleSingleAccount(req, res, next){
 		// Query only bills that the user is involved in
 		var bq = { };
-		bq["changes."+req.params.id] = { $exists: true, $ne: 0 };
+		bq["balances."+req.params.id] = { $exists: true, $ne: 0 };
 		
 		Q.all([
-			User.byId(req.params['id']), 
+			Account.byId(req.params['id']), 
 			Bill.find(bq)
-		]).spread(function(user, bills){
+		]).spread(function(account, bills){
 			if(req.accepts('html','json') == 'html')	
-				res.render('user-form', {
-					title: user.profile && user.profile.name.givenName + ' - Users',
-					user: user,
+				res.render('account-form', {
+					title: account.name,
+					account: account,
 					bills: bills,
 					editable: true,
-					userTypes: User.types(),
 				});
 			else	
-				res.redirect(201, '/users/'+id)
+				res.redirect(201, '/accounts/'+id)
 			
 		}).fail(next)
 	}
 
-	function handleUserSave(req, res, next){
+	function handleAccountSave(req, res, next){
 		Account.byId(req.param.id || req.body.id).then(function(account){ 
 			account.name = req.body.name;
 			return account.save();

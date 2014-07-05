@@ -1,0 +1,31 @@
+<div class="spacer" style="margin-bottom:5mm"></div>
+
+<div class="alert alert-info alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert">
+  	<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+  </button>
+  <strong>{{t 'Please note:'}}</strong> {{t 'when saved, multiple deposits are split up in to separate bills.'}}
+</div>
+
+<div class="table-wrap table-wrap-noborder" style="margin-top:1em">
+<table class="table table-striped table-hover table-condensed table-bordered">
+    <thead><tr>
+      <th style="width:100px">{{t 'Date'}}</th>
+      <th>{{t 'User'}}</th>
+      <th>{{t 'Account'}}</th>
+      <th  class='euro-col' style="width:100px">{{t 'Amount'}}</th>
+    </tr></thead>
+
+    {{#each bill/deposits}}
+      {{>bill-deposit-row}}
+    {{/each}}
+    
+    <tfoot>
+      {{>bill-deposit-row}}
+    </foot>
+</table>
+</div>
+
+<div class="dropbox" style="border: 2px dashed gray; padding: 2cm; text-align: center;margin-top:1em">
+	Drop bank csv here to import
+</div>

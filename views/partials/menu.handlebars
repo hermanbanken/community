@@ -23,8 +23,9 @@
       <div class="navbar-form navbar-right login">
         <div class="form-group">
           {{#if user}}{{#with user}}
-          <a class="btn member" href="/users/{{_id}}">
-            <img class="member-gravatar" src="{{gravatar profile.picture.src}}" /><span class="member-name">{{name profile}}</span>
+          <a class="btn btn-default" href="/users/{{_id}}"><!--class: member-->
+            <!--<img class="member-gravatar" src="{{gravatar profile}}" />-->
+            <span class="member-name">{{name profile}}</span>
           </a>
           {{/with}}{{else}}
           <a class='btn btn-default' href="/auth/google">Sign in with Google</a> 
