@@ -1,4 +1,5 @@
-var moment = require('moment');
+var moment = require('moment'),
+	lang = require('./translation.nl');
 
 exports.Authenticated = function Authenticated(req, res, next){
 	if(req.isAuthenticated()){
@@ -54,7 +55,8 @@ exports.ViewHelpers = {
 	},
 	stringify: JSON.stringify,
 	t: function(key){
-		//console.log("Translating", key);
+		if(lang[key])
+			return lang[key];
 		return key;
 	},
 	rel_date: function(date){
