@@ -1,22 +1,24 @@
 <div class="container">
-  <div class="row"><div class="col-md-8">
+<div class="row">
+  <div class="col-md-4">
+    <h2>{{t 'Balances'}}</h2>
+    <div class="table-wrap">
+        <table class="table table-striped table-hover">
+            <thead><tr>
+              <th>{{t 'User'}}</th>
+              <th class='euro-col'>{{t 'Balance'}}</th>
+            </tr></thead>
+            {{#each users}}
+            <tr>
+              <td><a href="/users/{{_id}}">{{name profile}}</a></td>
+              <td class='euro' value="{{currency saldo}}">{{currency saldo}}</td>
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+  </div>
+  <div class="col-md-8">
     {{> bills}}
   </div>
-  <div class="col-md-4">
-      <h2>{{t 'Balances'}}</h2>
-      <div class="table-wrap">
-          <table class="table table-striped table-hover">
-              <thead><tr>
-                <th>{{t 'User'}}</th>
-                <th class='euro-col'>{{t 'Balance'}}</th>
-              </tr></thead>
-              {{#each users}}
-              <tr>
-                <td><a href="/users/{{_id}}">{{name profile}}</a></td>
-                <td class='euro' value="{{currency saldo}}">{{currency saldo}}</td>
-              </tr>
-              {{/each}}
-          </table>
-      </div>
-  </div></div>
+</div>
 </div>
