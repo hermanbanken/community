@@ -65,6 +65,8 @@ module.exports = function(ExpressApp, Database){
 	function handleUserSave(req, res, next){
 		User.byId(req.param.id || req.body.id).then(function(user){ 
 			user.profile = req.body.profile;
+			user.tags = req.body.tags;
+			user.type = req.body.type;
 			return user.save();
 		}).then(function(id){
 			if(req.accepts('html','json') == 'html')	

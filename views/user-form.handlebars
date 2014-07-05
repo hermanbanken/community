@@ -25,12 +25,19 @@
           <label for="displayName">{{#isEqual type to='fund'}}{{t 'Fund name'}}{{else}}{{t 'Display name'}}{{/isEqual}}</label>
           <input name="profile[displayName]" id="displayName" class="form-control" placeholder="{{t 'Display name'}}" value="{{profile.displayName}}" />
         </div>
-        {{#each profile.emails}}
         <div class="form-group">
-          <label for="email_{{@index}}">{{t 'Emails'}}</label>
+          <label for="email_0">{{t 'Emails'}}</label>
+          {{#each profile.emails}}
           <input id="email_{{@index}}" class="form-control" name="profile[emails][{{@index}}][value]" placeholder="{{t 'user@example.org'}}" value="{{this.value}}" />
+          {{/each}}
         </div>
-        {{/each}}
+        <div class="form-group">
+          <label for="tag_0">{{t 'Tags'}}</label>
+          {{#each tags}}
+          <input id="tag_{{@index}}" style="margin-bottom: 4px" class="form-control" name="tags[{{@index}}]" value="{{this}}" />
+          {{/each}}
+          <input id="tag_{{@index}}" class="form-control" name="tags[{{@index}}]" placeholder="{{t 'Add tag (year, group, committee)'}}" />
+        </div>
         <div class="form-group">
           <label for="type">{{t 'Type'}}</label>
           <select name="type" class="form-control">
