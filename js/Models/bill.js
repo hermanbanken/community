@@ -34,7 +34,9 @@ module.exports = function(Database){
 	}
 
 	Bill.byId = utils.findById.bind(utils, Database, 'bills', Bill);
-	Bill.find = utils.find.bind(utils, Database, 'bills', Bill);
+	Bill.find = function(){
+		return utils.findAndSort.bind(utils, Database, 'bills', Bill).call(utils, arguments, [{ date: -1 }]);
+	}
 
 	Bill.types = function(){
 		return ["standard", "deposit", "activity"];

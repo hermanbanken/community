@@ -92,6 +92,16 @@ module.exports = {
 		})
 	},
 
+	findAndSort: function findAndSort(db, collection, modelType, findArgs, sortArgs){
+		return dbCollection(db, collection).then(function(_){
+			var f = _.find.apply(_, findArgs);
+			var s = f.sort.apply(f, sortArgs);
+			return Q.nfcall(s.toArray.bind(_));
+		}).then(function(list){
+			return list.map(function(i){ return new modelType(i) })
+		})
+	},
+
 	saveModel: function saveModel(db, collection, model){
 		var id = ensureOID(model._id);
 
