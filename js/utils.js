@@ -71,6 +71,9 @@ module.exports = {
 			}, {
 				out: { inline: 1 }
 			});
+		}).catch(function(err){
+			console.error("MapReduce failed", err);
+			return [];
 		})
 	},
 
