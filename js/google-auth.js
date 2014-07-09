@@ -12,11 +12,12 @@ module.exports = function(ExpressApp, Database){
 	
 	var hostname = process.env.HOSTNAME || package.config.hostname || require('os').hostname();
 	var port = process.env.HEROKU_PUBLIC_PORT || process.env.PORT || package.config.port || 80;
+	var callbackurl = 'http://'+hostname+':'+port+'/auth/google/return';
 
 	passport.use(new GoogleStrategy({
 	    clientID: process.env.GOOGLE_CLIENTID || package.config.google.clientid,
 	    clientSecret: process.env.GOOGLE_SECRET || package.config.google.secret,
-	    callbackURL: 'http://'+hostname+':'+port+'/auth/google/return',
+	    callbackURL: callbackurl,
 	  },
 	  function(identifier, other, profile, done) {
 	  	console.log("OAauth login", arguments);
