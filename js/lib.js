@@ -1,4 +1,5 @@
 var moment = require('moment'),
+	package = require('../package'),
 	lang = require('./translation.nl');
 
 exports.Authenticated = function Authenticated(req, res, next){
@@ -17,6 +18,7 @@ exports.Authenticated = function Authenticated(req, res, next){
 }
 
 exports.WithMenu = function(req, res, next){
+	res.locals.appname = package.name.charAt(0).toUpperCase() + package.name.slice(1);
 	if(req.user)
 		res.locals.menuItems = [{
 			path: '/bills',
