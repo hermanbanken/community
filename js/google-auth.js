@@ -20,11 +20,10 @@ module.exports = function(ExpressApp, Database){
 	    callbackURL: callbackurl,
 	  },
 	  function(identifier, other, profile, done) {
-	  	console.log("OAauth login", arguments);
 	  	User.then(function(c){
 	    	c.findAndModify({ $or: [
 	    		{ openId: identifier }, 
-	    		{ "profile.emails": profile.emails }
+	    		{ "profile.emails.value": profile.emails[0].value }
 	    	]}, [], { 
 	    		$set: {
 		 			lastLogin: new Date,
