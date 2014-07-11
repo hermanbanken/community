@@ -35,9 +35,10 @@ module.exports = function(ExpressApp, Database){
 		    	},
 		    	$setOnInsert: {
 			    	createdAt: new Date,
-			    	"profile.name": profile.name, 
-			    }
-			}, { upsert: true, new: true }, function(err, user) {
+			    	"profile.name": profile.name,
+			    	"profile.displayName": profile.displayName,
+		    	}
+			}, { upsert: false, new: true }, function(err, user) {
 		      done(err, user);
 		    })
 	  	})
