@@ -31,6 +31,7 @@ function start(db)
 	  .use(passport.initialize())
 	  .use(passport.session());
 
+	require("./js/seed")(app, dbPromise);
 	require("./js/site")(app, dbPromise);
 	require("./js/google-auth")(app, dbPromise);
 	require("./js/api-users")(app, dbPromise);
