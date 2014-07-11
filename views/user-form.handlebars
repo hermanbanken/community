@@ -30,6 +30,8 @@
           {{#each profile.emails}}
           <input id="email_{{@index}}" class="form-control" name="profile[emails][{{@index}}][value]" placeholder="{{t 'user@example.org'}}" value="{{this.value}}" />
           {{/each}}
+          <input id="email_new" class="form-control" name="profile[emails][{{profile.emails.length}}][value]" placeholder="{{t 'Add emailaddress'}}" />
+        
         </div>
         <div class="form-group">
           <label for="tag_0">{{t 'Tags'}}</label>

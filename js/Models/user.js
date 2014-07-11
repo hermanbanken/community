@@ -49,6 +49,11 @@ module.exports = function(Database){
 	User.prototype.save = function(){
 		if(!this.profile)
 			throw new Error("User must have a profile");
+
+		this.profile.emails = _.filter(this.profile.emails, function(e){
+			return e.value;
+		});
+
 		return utils.saveModel(Database, 'users', this)	
 	};
 
