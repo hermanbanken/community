@@ -31,11 +31,14 @@ module.exports = function(ExpressApp, Database){
 
 	function handleIndex(req, res, next){
 		Q.all([User.find(), Account.find()]).spread(function(users, accounts){
+			if(req.accepts('html','json') == 'html')	
 			res.render('users', {
 				title: 'Users',
 				users: users,
 				accounts: accounts,
 			});
+			else
+			res.send(200, users);
 		}).fail(next)
 	}
 
