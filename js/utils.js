@@ -132,5 +132,19 @@ module.exports = {
 		}).then(function(result){
 			return id;
 		})
+	},
+
+	trashModel: function trashModel(db, collection, model){
+		console.log("Trashing", model);
+		//var id = ensureOID(model._id);
+		var id = model._id;
+		
+		return dbCollection(db, "trash").then(function(trash){
+			return Q.nfcall(trash.insert.bind(trash, model, {j: true}));
+		}).then(function(){
+			return dbCollection(db, collection);
+		}).then(function(mongo){
+			return Q.nfcall(mongo.remove.bind(mongo, {_id: id}));
+		});
 	}
 };

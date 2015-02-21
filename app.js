@@ -40,7 +40,8 @@ function start(db)
 
 	// Default error handler
 	app.use(function errorHandler(err, req, res, next) {
-	  res.send(500, err);
+	  console.error(err);
+	  res.send(500, JSON.stringify(err));
 	})
 
 	app.use(express.static(__dirname + '/public'));

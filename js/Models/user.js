@@ -16,6 +16,9 @@ module.exports = function(Database){
 
 			this[n] = o[n];
 		}
+
+		if(!this.profile.name)
+			this.profile.name = {};
 	}
 
 	User.byId = function(id){
@@ -39,8 +42,10 @@ module.exports = function(Database){
 	};
 
 	User.types = function(){
-		return ["standard", "fund"];
+		return ["user", "fund"];
 	}
+
+	User.prototype.profile = { displayName: "", name: { givenName: "", familyName: "" } };
 
 	User.prototype.validate = function(){
 		return true;
@@ -55,6 +60,14 @@ module.exports = function(Database){
 		});
 
 		return utils.saveModel(Database, 'users', this)	
+	};
+
+	User.prototype.delete = function(){
+		return utils.trashModel(Database, 'users', this)
+			.then(function(id){
+				Cache.clear('saldos');
+				return id;
+			})
 	};
 
 	return User;

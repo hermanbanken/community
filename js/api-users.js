@@ -20,6 +20,9 @@ module.exports = function(ExpressApp, Database){
 	app.use('/users', router);
 	router.use(lib.Authenticated)
 
+	// Delete
+	router.get('/:id/delete', handleUserDelete);
+	router.delete('/:id', handleUserDelete);
 	// Gets
 	router.get('/', handleIndex);
 	router.get('/:id', handleSingleUser)
@@ -43,6 +46,18 @@ module.exports = function(ExpressApp, Database){
 	}
 
 	function handleSingleUser(req, res, next){
+		if(req.params['id'] == 'create'){
+			console.log("Create");
+			res.render('user-form', {
+				title: 'Create - Users',
+				show_user: new User(),
+				bills: [],
+				editable: true,
+				userTypes: User.types(),
+			});
+			return;
+		}
+
 		// Query only bills that the user is involved in
 		var bq = { };
 		bq["changes."+req.params.id] = { $exists: true, $ne: 0 };
@@ -54,7 +69,7 @@ module.exports = function(ExpressApp, Database){
 			if(req.accepts('html','json') == 'html')	
 				res.render('user-form', {
 					title: user.profile && user.profile.name.givenName + ' - Users',
-					user: user,
+					show_user: user,
 					bills: bills,
 					editable: true,
 					userTypes: User.types(),
@@ -79,4 +94,21 @@ module.exports = function(ExpressApp, Database){
 		}).fail(next);		
 	}
 
+	function handleUserDelete(req, res, next){
+		if(!req.params['id'])
+			return next();
+
+		if(req.user._id == req.params['id']){
+			console.warn("Can't delete self-user.");
+			return res.redirect(201, '/users');
+		}
+
+		if(req.user.tags.indexOf("admin") >= 0){
+			User.byId(req.params['id']).then(function(user){
+				return user.delete();
+			}).then(function(){
+				res.redirect('/users/');
+			}).done();
+		} else next();
+	}
 }

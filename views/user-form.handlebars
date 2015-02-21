@@ -1,17 +1,24 @@
 
-{{#with user}}
+{{#with show_user}}
 <form role="form" method="post" action="/users/{{#if _id}}{{_id}}{{/if}}">
 <div class="container">
   <div class="row">
   	<div class="col-md-3">
-  		{{#if _id}}
-      <h2>Edit user</h2>
+  		<h2 style="margin-bottom: .5cm">
+      {{#if _id}}
+        {{t 'Edit user'}}
+        {{#isRole 'admin' ../../user}}
+        <a data-action='remove' onclick="return confirm('{{t 'Are you sure?'}}')" href="/users/{{_id}}/delete" class="btn btn-xs btn-danger">{{t 'Delete'}}</a>
+        {{/isRole}}
       {{else}}
-      <h2>Create user</h2>
+        {{t 'Create user'}}
+        <a href='javascript:history.back()' class="btn btn-danger btn-xs">{{t 'Cancel'}}</a>
       {{/if}}
-  	   <input type="hidden" name="id" value="{{_id}}" /> 
-        {{#isEqual type to='fund'}}
-        {{else}}
+      </h2>
+  	  <input type="hidden" name="id" value="{{_id}}" />
+      
+      {{#isEqual type to='fund'}}
+      {{else}}
         <div class="form-group">
           <label for="givenName">{{t 'Given name'}}</label>
           <input name="profile[name][givenName]" id="givenName" class="form-control" placeholder="{{t 'Given name'}}" value="{{profile.name.givenName}}"  required />

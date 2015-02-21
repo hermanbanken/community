@@ -65,6 +65,14 @@ module.exports = function(Database){
 			})
 	};
 
+	Bill.prototype.delete = function(){
+		return utils.trashModel(Database, 'bills', this)
+			.then(function(id){
+				Cache.clear('saldos');
+				return id;
+			})
+	};
+
 	return Bill;
 
 };

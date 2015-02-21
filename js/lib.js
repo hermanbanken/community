@@ -86,6 +86,13 @@ exports.ViewHelpers = {
 		return "";
 	},
 
+	isRole: function(role, user, options){
+		if(user && user.tags && user.tags.indexOf(role) >= 0)
+			return  options.fn(this);
+		else
+			return options.inverse(this);
+	},
+
 };
 
 exports.WithUser = function WithUser(req, res, next){

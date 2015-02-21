@@ -22,6 +22,9 @@ var exports = function(ExpressApp, Database){
 	app.use('/bills', router);
 	router.use(lib.Authenticated);
 
+	// Delete
+	router.get("/:id/delete", handleDeleteSingle)
+	router.delete("/:id", handleDeleteSingle)
 	// Gets
 	router.get('/', index.bind(this, all));
 	router.get('/:id', single)
@@ -43,6 +46,18 @@ var exports = function(ExpressApp, Database){
 		}).fail(next);
 	}
 
+	function handleDeleteSingle(req, res, next){
+		if(!req.params['id'])
+			return next();
+
+		if(req.user.tags.indexOf("admin") >= 0){
+			Bill.byId(req.params['id']).then(function(bill){
+				return bill.delete();
+			}).then(function(){
+				res.redirect('/bills/');
+			}).done();
+		} else next();
+	}
 
 	function handleBillSave(req, res, next){
 		var b = new Bill(req.body);
@@ -61,11 +76,15 @@ var exports = function(ExpressApp, Database){
 		if(!req.params['id'])
 			return next();
 
+		var bill = req.params['id'] == 'create' ? new Bill() : Bill.byId(req.params['id']);
+
+		renderSingle(bill, req, res, next);
+	}
+
+	function renderSingle(bill, req, res, next){
 		var users = User.find();
 		var accounts = Account.find();
-
-		var bill = req.params['id'] == 'create' ? { bill : new Bill() } : Bill.byId(req.params['id']);
-
+		
 		Q.all([users, accounts, bill]).spread(function(users, accounts, bill){
 			if(req.accepts('html','json') == 'html')		
 				res.render('bill-form', {

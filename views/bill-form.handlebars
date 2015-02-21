@@ -9,7 +9,8 @@
         <button type="submit" class="btn btn-xs btn-default">{{t 'Save'}}</button>
         {{#if _id}}
         <input type="hidden" name="_id" value="{{_id}}" /> 
-        <a data-action='remove' class="btn btn-xs btn-danger">{{t 'Delete'}}</a>
+        {{#isRole 'admin' ../../user}}<a data-action='remove' onclick="return confirm('{{t 'Are you sure?'}}')" href="/bills/{{_id}}/delete" class="btn btn-xs btn-danger">{{t 'Delete'}}</a>
+        {{/isRole}}
         {{else}}
         <a href='javascript:history.back()' class="btn btn-danger btn-xs">{{t 'Cancel'}}</a>
         {{/if}}
