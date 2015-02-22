@@ -54,23 +54,17 @@
       <ul class="nav nav-tabs" role="tablist">
         <li class="disabled"><a>{{t 'Choose Entry'}}:</a></li>
         {{#each ../billTypes}}
-          {{#isEqual this to='standard'}}
-          {{else}}
-          {{/isEqual}}
           <li {{#isEqual this to=../type}}class="active"{{/isEqual}}>
             <a href="#{{this}}" role="tab" data-toggle="tab">{{t this}}</a>
           </li>
-          {{#isEqual this to='standard'}}
-          {{else}}
-          {{/isEqual}}
         {{/each}}
       </ul>
       <!-- Tab panes -->
       <div class="tab-content" id="bill-type-tabs">
-        <div class="tab-pane active {{#isEqual type to='standard'}}{{!active}}{{/isEqual}}" id="standard">
+        <div class="tab-pane {{#isEqual type to='standard'}}active{{/isEqual}}" id="standard">
           {{#with ..}}{{>bill-standard-entry}}{{/with}}
         </div>
-        <div class="tab-pane active {{#isEqual type to='deposit'}}active{{/isEqual}}" id="deposit">
+        <div class="tab-pane {{#isEqual type to='deposit'}}active{{/isEqual}}" id="deposit">
           {{#with ..}}{{>bill-deposit-entry}}{{/with}}
         </div>
         {{!-- <div class="tab-pane {{#isEqual type to='activity'}}active{{/isEqual}}" id="activity">
