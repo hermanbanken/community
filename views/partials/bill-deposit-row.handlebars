@@ -24,7 +24,7 @@
 		data-name="deposits[{{@key}}][account]" 
 		{{#if @key}}name="deposits[{{@key}}][account]"{{/if}}
 	>
-		{{#each ../accounts}}
+		{{#each accounts}}
 			<option value="{{_id}}" {{#isEqual ../account to=_id}}selected{{/isEqual}}>{{this.name}}</option>
 		{{/each}}
 	</select>

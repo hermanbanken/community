@@ -1,15 +1,15 @@
 /* Typeahead */
 (function($, _){
 	function handleChange(suggest, e, pick){
-	if(suggest.find(".selected").size() == 0)
+	if(suggest.find(".selected:visible").size() == 0)
 		suggest.find("li:visible").first().addClass('selected');
 
 	if(e.keyCode == 27 /* esc */ || e.type == 'blur')
 		suggest.delay(100).hide(10);
 	if(e.keyCode == 38 /* up */)
-		suggest.find(".selected").removeClass('selected').prev().addClass('selected');
+		suggest.find(".selected").removeClass('selected').prev().addClass('selected').siblings().removeClass('selected');
 	if(e.keyCode == 40 /* down */)
-		suggest.find(".selected").removeClass('selected').next().addClass('selected');
+		suggest.find(".selected").removeClass('selected').next().addClass('selected').siblings().removeClass('selected');
 	if(e.keyCode == 13 /* enter */){
 		suggest.hide();
 
@@ -19,8 +19,8 @@
 
 		pick.call(
 			e.target,
-			$(".selected", suggest).attr('data-id'),
-			$(".selected", suggest).text().trim()
+			$(".selected", suggest).first().attr('data-id'),
+			$(".selected", suggest).first().text().trim()
 		);
 		e.preventDefault(); 
 		return false;
@@ -28,6 +28,8 @@
 	
 	if(suggest.find(".selected").size() == 0)
 		suggest.find("li:visible").first().addClass('selected');
+	if(suggest.find(".selected").size() > 1)
+		suggest.find(".selected:gt(0)").removeClass('selected');
 }
 
 function addSuggest(type, relativeTo){
@@ -65,7 +67,7 @@ $.fn.extend({
 			} else 
 				$(".typeahead").append(suggest);
 			
-			var p = $(this);
+			var p = $(this).offset();
 			suggest.css({
 				position: "absolute",
 				left: p.left,

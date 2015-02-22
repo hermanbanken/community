@@ -39,7 +39,7 @@ module.exports = function(Database){
 	}
 
 	Bill.types = function(){
-		return ["standard", "deposit", "activity"];
+		return ["standard", "deposit"/*, "activity"*/];
 	}
 
 	Bill.prototype.validate = function(){
