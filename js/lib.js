@@ -1,5 +1,6 @@
 var moment = require('moment'),
-	package = require('../package'),
+	npm_package = require('../package'),
+	_ = require('underscore'),
 	lang = require('./translation.nl');
 
 exports.Authenticated = function Authenticated(req, res, next){
@@ -18,7 +19,7 @@ exports.Authenticated = function Authenticated(req, res, next){
 }
 
 exports.WithMenu = function(req, res, next){
-	res.locals.appname = package.name.charAt(0).toUpperCase() + package.name.slice(1);
+	res.locals.appname = npm_package.name.charAt(0).toUpperCase() + npm_package.name.slice(1);
 	if(req.user)
 		res.locals.menuItems = [{
 			path: '/bills',
@@ -43,14 +44,31 @@ exports.ViewHelpers = {
 		else
 			return options.inverse(this);
 	},
+	withEmpty: function(options){
+		return options.fn({}, { data: options.data });
+	},
+	eachIncludeParent: function ( context, options ) {
+		var fn = options.fn,
+				inverse = options.inverse,
+				ret = "",
+				_context = [];
+		if(context)
+			_.each(context, function(object, index){
+				var _object = _.extend({ "parentContext": options.hash.parent, "key": index }, object);
+				ret = ret + fn(_object);
+			});
+		else
+			ret = inverse(this);
+		return ret;
+	},
 	routeClass: function(path){
 		return "";
 	},
 	datef: function(date, format){
-	    return moment(date).format(format);
+		return moment(date).format(format);
 	},
- 	currency: function(number){
-	    return (typeof number == 'number' || !isNaN(number)) && (number/100).toFixed(2) || "";
+	currency: function(number){
+		return (typeof number == 'number' || !isNaN(number)) && (number/100).toFixed(2) || "";
 	},
 	name: function(profile){
 		return profile.displayName || profile.name && profile.name.givenName + " " + profile.name.familyName;
@@ -132,9 +150,9 @@ exports.WithFlash = function WithFlash(req, res, next){
 exports.WithData = function WithData(req, res, next){
 	// Empty body / no data
 	if(typeof req.body == 'object' && Object.keys(req.body).length == 0){
-	  return res
-	  	.flashing('warning', 'Please send some data', 'question')
-    	.send(400, "No POST data found");
+		return res
+		.flashing('warning', 'Please send some data', 'question')
+		.send(400, "No POST data found");
 	}
 	next();
 }

@@ -16,12 +16,12 @@
       <th  class='euro-col' style="width:100px">{{t 'Amount'}}</th>
     </tr></thead>
 
-    {{#each bill/deposits}}
-      {{>bill-deposit-row}}
-    {{/each}}
+    {{#eachIncludeParent bill/deposits parent=this}}
+      {{> bill-deposit-row}}
+    {{/eachIncludeParent}}
     
     <tfoot>
-      {{>bill-deposit-row}}
+    {{> bill-deposit-row this}}
     </foot>
 </table>
 </div>

@@ -1,39 +1,39 @@
-<tr>
-	{{stringify this.date}}
-	{{stringify this.username}}
-	{{stringify this.account}}
-	{{stringify this.amount}}
+<tr data-user="{{key}}">
 <td>
-	<input type="date" class="seamless" id="date" placeholder="Datum" 
-		data-name="deposits[{{@key}}][date]" 
-		{{#if @key}}name="deposits[{{@key}}][date]"{{/if}}
+	<input type="date" class="seamless" id="date" placeholder="Datum"
+		data-name="deposits[{{key}}][date]"
+		{{#if key}}name="deposits[{{key}}][date]"{{/if}}
 		value="{{datef date 'YYYY-MM-DD'}}" />
 </td>
 <td class="truncate has-feedback">
+{{index}}
 	<input type="text" class="seamless" placeholder="Add user deposit..."
-		data-name="deposits[{{@key}}][username]" 
-		{{#if @key}}name="deposits[{{@key}}][username]"{{/if}}
-		data-id="{{_id}}" 
-		data-typeahead="users" 
-		value="{{username}}" 
+		data-name="deposits[{{key}}][username]"
+		{{#if key}}name="deposits[{{key}}][username]"{{/if}}
+		data-id="{{key}}"
+		data-typeahead="users"
+		value="{{username}}"
 	/>
-  <span class="glyphicon {{#if @key}}glyphicon-ok{{/if}} feedback"></span>
+	<span class="glyphicon {{#if key}}glyphicon-ok{{/if}} feedback"></span>
 </td>
 <td>
 	<select class="seamless"
-		data-name="deposits[{{@key}}][account]" 
-		{{#if @key}}name="deposits[{{@key}}][account]"{{/if}}
+		data-name="deposits[{{key}}][account]"
+		{{#if key}}name="deposits[{{key}}][account]"{{/if}}
 	>
+		{{#each parentContext/accounts}}
+			<option value="{{_id}}" {{#isEqual ../account to=_id}}selected{{/isEqual}}>{{this.name}}</option>
+		{{/each}}
 		{{#each accounts}}
 			<option value="{{_id}}" {{#isEqual ../account to=_id}}selected{{/isEqual}}>{{this.name}}</option>
 		{{/each}}
 	</select>
 </td>
 <td class="euro">
-	<input type="number" class="seamless euro" step="0.01" 
-		data-name="deposits[{{@key}}][amount]" 
-		{{#if @key}}name="deposits[{{@key}}][amount]"{{/if}} 
-		value="{{amount}}" 
+	<input type="number" class="seamless euro" step="0.01"
+		data-name="deposits[{{key}}][amount]"
+		{{#if key}}name="deposits[{{key}}][amount]"{{/if}}
+		value="{{amount}}"
 	/>
 </td>
 </tr>

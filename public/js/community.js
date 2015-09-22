@@ -99,8 +99,7 @@ $.fn.extend({
 /* Deposit bills */
 (function billDeposit($, _){
 
-	$("[data-typeahead]")
-	.on('keyup', function(){
+	$("body").delegate("[data-typeahead]", 'keyup', function(){
 		var b = this.hasAttribute('data-id');
 		if(b && this.value != this.getAttribute('data-username'))
 			this.removeAttribute('data-id');
@@ -110,19 +109,54 @@ $.fn.extend({
 			$(this).next('.glyphicon').removeClass("glyphicon-ok");
 		else
 			$(this).next('.glyphicon').toggleClass("glyphicon-remove", !b).toggleClass("glyphicon-ok", b);
-	})
-	.trigger('keyup')
-	.typeahead(function(id, name){
-		console.log(this, arguments);
-		this.value = name;
-		this.setAttribute('data-id', id);
-		this.setAttribute('data-username', name);
 
-		$(this).closest("tr").find("[data-name]").each(function(){
-			$(this).attr('name', $(this).attr('data-name').replace(/deposits\[[^\[]*\]/, "deposits["+id+"]"));
-		})
+		if(!$(this).attr("hasTypeAhead"))
+		$(this).typeahead(function(id, name){
+			console.log(this, arguments);
+			this.value = name;
+			this.setAttribute('data-id', id);
+			this.setAttribute('data-username', name);
 
-		$(this).next('.glyphicon').removeClass("glyphicon-remove").addClass("glyphicon-ok");
+			$(this).closest("tr").find("[data-name]").each(function(){
+				$(this).attr('name', $(this).attr('data-name').replace(/deposits\[[^\[]*\]/, "deposits["+id+"]"));
+			})
+
+			$(this).next('.glyphicon').removeClass("glyphicon-remove").addClass("glyphicon-ok");
+		});
+		$(this).attr("hasTypeAhead", "1");
+	});
+
+	function calc(){
+		var data = $("#deposit [data-user]").map(function(){
+			var id = $(this).attr("data-user");
+			var newId = $(this).find("[data-id]").attr("data-id");
+			return {
+				userid: newId,
+				username: $('[data-name="deposits['+id+'][amount]"]', this).val(),
+				account:  $('[data-name="deposits['+id+'][account]"]', this).val(),
+				amount:   $('[data-name="deposits['+id+'][amount]"]', this).val(),
+			};
+		});
+		var balances = _.reduce(data, function(balances, u){
+			balances[u.account] = (balances[u.account] || 0) + u.amount * 100;
+			return balances;
+		}, {});
+		var changes = _.reduce(data, function(changes, u){
+			changes[u.userid] = (changes[u.userid] || 0) + u.amount * 100;
+			return changes;
+		}, {});
+
+		$.map(changes, function(v, uid){
+			$('[name="changes['+uid+']"]').val(v);
+		});
+		$.map(balances, function(v, aid){
+			$('[data-account="'+aid+'"] [data-type=cost-visual]').val((v / 100).toFixed(2));
+			$('[name="balances['+aid+']"]').val(v);
+		});
+	}
+
+	$("body").delegate("[data-name^=deposits]", "change blur", function(){
+	  calc();
 	});
 
 })(jQuery, _);
@@ -156,7 +190,7 @@ $.fn.extend({
 	}
 
 	// Change cost field
-	$("[data-type=cost-visual]", this).on("change", function(){
+	$("body").delegate("[data-type=cost-visual]", "change", function(){
 		var v = (pick(0, this) * 100).toFixed(0);
 		var id = $(this).closest("[data-account]").attr('data-account');
 		update($("[name='balances["+id+"]']"), v);
@@ -164,10 +198,10 @@ $.fn.extend({
 	});
 
 	// Change presence field
-	$("[data-type=presence]", this).on("change keyup blur", calc);
+	$("body").delegate("[data-type=presence]", "change keyup blur", calc);
 
 	// Change personal field
-	$("[data-type=personal-visual]", this).on("change", function(){
+	$("body").delegate("[data-type=personal-visual]", "change", function(){
 		var visual = $(this).closest("tr").find("[data-type=personal]");
 		update(visual, (pick(0, this) * 100).toFixed(0));
 		calc();
