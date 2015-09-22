@@ -3,6 +3,8 @@ var hbrs = require('express-handlebars')
 var passport = require('passport')
 var lib = require('./lib')
 var Q = require("q");
+var multiViews = require('multi-views');
+var path = require('path');
 
 var Handlebars = hbrs.create({
 	helpers: lib.ViewHelpers,
@@ -13,10 +15,12 @@ Handlebars.getPartials();
 
 module.exports = function Site(ExpressApp, Database){
 	var app = ExpressApp;
-	
+
 	app.engine('handlebars', Handlebars.engine);
 	app.set('view engine', 'handlebars');
-	app.set('views', __dirname+'/../views');
+	multiViews.setupMultiViews(app);
+	app.set('views', [path.join(__dirname, '..', 'views')]);
+
 	app.use(partials());
 
 	var User = require('./Models/user')(Database),
@@ -57,7 +61,7 @@ module.exports = function Site(ExpressApp, Database){
 		req.logout();
 		res
 			.flashing('info', 'You\'ve signed out', 'info')
-	    	.redirect('/');
+			.redirect('/');
 	})
 
 	app.get('/user', lib.Authenticated, function(req, res){

@@ -10,7 +10,7 @@ module.exports = function(Database){
 		if(typeof o !== 'object')
 			return;
 
-		for(n in o){
+		for(var n in o){
 			if(!o.hasOwnProperty(n))
 				continue;
 

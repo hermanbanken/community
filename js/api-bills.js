@@ -1,12 +1,11 @@
 var Q = require('q')
-var package = require("../package.json")
 var lib = require('./lib')
 var _ = require("underscore")
 var express = require("express")
 var BSON = require('mongodb').BSONPure;
 
 // Register end-points that serve both json and html
-var exports = function(ExpressApp, Database){
+module.exports = function(ExpressApp, Database, Community){
 	var app = ExpressApp,
 		router = express.Router(),
 		User = require('./Models/user')(Database),
@@ -30,6 +29,8 @@ var exports = function(ExpressApp, Database){
 	router.get('/:id', single)
 	// Create new bill
 	router.post('/', handleBillSave)
+	// Preview bill from POST
+	router.post('/preview', handleBillPreview)
 	// Modify existing bill
 	router.put('/:id', handleBillSave)
 	router.post('/:id', handleBillSave)
@@ -98,6 +99,9 @@ var exports = function(ExpressApp, Database){
 				res.send(200, bill);
 		}).fail(next);
 	}
-}
 
-module.exports = exports;
+	function handleBillPreview(req, res, next){
+		var b = new Bill(req.body);
+		renderSingle(b, req, res, next);
+	}
+}

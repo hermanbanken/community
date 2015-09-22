@@ -1,5 +1,4 @@
 var Q = require('q')
-var package = require("../package.json")
 var lib = require('./lib')
 var _ = require("underscore")
 var underscore = require("underscore")
@@ -7,7 +6,7 @@ var express = require("express")
 var BSON = require('mongodb').BSONPure;
 
 // Register end-points that serve both json and html
-module.exports = function(ExpressApp, Database){
+module.exports = function(ExpressApp, Database, Community){
 	var app = ExpressApp,
 		router = express.Router(),
 		User = require('./Models/user')(Database),

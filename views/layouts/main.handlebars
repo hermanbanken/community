@@ -24,9 +24,8 @@
 
   {{{body}}}
   
-  <script src="/js/vendor/jquery.min.js"></script>
-  <script src="/js/vendor/underscore-min.js"></script>
-  <script src="/js/vendor/bootstrap-3.2.0/js/bootstrap.min.js"></script>
-  <script src="/js/community.js"></script>
+	{{#each scripts}}
+	  <script src="{{this}}"></script>
+	{{/each}}
 </body>
 </html>
