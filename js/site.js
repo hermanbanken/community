@@ -1,5 +1,5 @@
 var partials = require('express-partials')
-var hbrs = require('express3-handlebars')
+var hbrs = require('express-handlebars')
 var passport = require('passport')
 var lib = require('./lib')
 var Q = require("q");
@@ -9,10 +9,7 @@ var Handlebars = hbrs.create({
 	defaultLayout: 'main'
 })
 
-Handlebars.loadPartials(function (err, partials) {
-    // => { 'foo.bar': [Function],
-    // =>    title: [Function] }
-})
+Handlebars.getPartials()
 
 module.exports = function Site(ExpressApp, Database){
 	var app = ExpressApp;
