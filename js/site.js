@@ -9,7 +9,7 @@ var Handlebars = hbrs.create({
 	defaultLayout: 'main'
 })
 
-Handlebars.getPartials()
+Handlebars.getPartials();
 
 module.exports = function Site(ExpressApp, Database){
 	var app = ExpressApp;

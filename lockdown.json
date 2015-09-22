@@ -68,7 +68,7 @@
     "0.1.0": "02ce0fdeee0cef4f40080e1e73e834f0b1bfce3f"
   },
   "better-assert": {
-    "1.0.0": "*"
+    "1.0.2": "40866b9e1b9e0b55b481894311e68faffaebc522"
   },
   "blob": {
     "0.0.2": "b89562bd6994af95ba1e812155536333aa23cf24"
@@ -153,8 +153,7 @@
   "commander": {
     "0.6.1": "fa68a14f6a945d54dbbe50d8cdb3320e9e3b1a06",
     "2.0.0": "d1b86f901f8b64bd941bdeadaf924530393be928",
-    "2.2.0": "175ad4b9317f3ff615f201c1e57224f55a3e91df",
-    "2.6.0": "9df7e52fb2a0cb0fb89058ee80c3104225f37e1d"
+    "2.2.0": "175ad4b9317f3ff615f201c1e57224f55a3e91df"
   },
   "component-bind": {
     "1.0.0": "00c608ab7dcd93897c0009651b1d3a8e1e73bbd1"
@@ -176,7 +175,7 @@
     "1.1.9": "39ac7d4dca84faad926124c54cff25a53aa8bf6e"
   },
   "connect-mongo": {
-    "0.4.1": "01ed3e71558fb3f0fdc97b784ef974f9909ddd11"
+    "0.8.0": "5775b43a2762e4f39121d4a41a2871c3b42fbd4f"
   },
   "console-browserify": {
     "1.1.0": "f0241c45730a9fc6323b206dbf38edc741d0bb10"
@@ -215,7 +214,8 @@
     "0.6.0": "ce9d5d025d5294b3f0748a494bebaf3c9fd8734f",
     "0.7.4": "06e1ea8082c2cb14e39806e22e2f6f757f92af39",
     "1.0.2": "3849591c10cce648476c3c7c2e2e3416db5963c4",
-    "1.0.3": "fc8c6b2d6002804b4081c0208e0f6460ba1fa3e4"
+    "1.0.3": "fc8c6b2d6002804b4081c0208e0f6460ba1fa3e4",
+    "2.2.0": "f87057e995b1a1f6ae6a4960664137bc56f039da"
   },
   "debuglog": {
     "1.0.1": "aa24ffb9ac3df9a2351837cfb2d279360cd78492"
@@ -240,7 +240,8 @@
     "0.0.5": "d4b1f43a93e8296dfe02694f4680bc37a313c73f"
   },
   "depd": {
-    "0.3.0": "11c9bc28e425325fbd8b38940beff69fa5326883"
+    "0.3.0": "11c9bc28e425325fbd8b38940beff69fa5326883",
+    "1.1.0": "e1bd82c6aab6ced965b97b88b17ed3e528ca18c3"
   },
   "dezalgo": {
     "1.0.3": "7f742de066fc748bc8db820569dddce49bf0d456"
@@ -283,7 +284,7 @@
     "1.3.1": "*"
   },
   "engine.io-parser": {
-    "1.0.6": "*"
+    "1.0.6": "d38813143a411cb3b914132ab05bf99e6f7a248e"
   },
   "entities": {
     "1.0.0": "b2987aa3821347fcde642b24fdfc9e4fb712bf26",
@@ -587,7 +588,8 @@
     "1.3.23": "874a5212162b16188aeeaee5e06067766c8e9e86"
   },
   "ms": {
-    "0.6.2": "d89c2124c6fdc1353d65a8b77bf1aac4b193708c"
+    "0.6.2": "d89c2124c6fdc1353d65a8b77bf1aac4b193708c",
+    "0.7.1": "9cd13c03adbff25b65effde7ce864ee952017098"
   },
   "mz": {
     "1.0.0": "*"
@@ -645,7 +647,7 @@
     "0.3.7": "c90941ad59e4273328923074d2cf2e7cbc6ec0d9"
   },
   "options": {
-    "0.0.5": "9a3806378f316536d79038038ba90ccb724816c3"
+    "0.0.6": "ec22d312806bb53e731773e7cdaefcf1c643128f"
   },
   "osenv": {
     "0.1.0": "61668121eec584955030b9f470b1d2309504bfcb"
@@ -668,17 +670,13 @@
     "1.1.3": "1f005738ac71b417bc2d0845cbdfa2a8b63ea639"
   },
   "passport": {
-    "0.1.18": "c8264479dcb6414cadbb66752d12b37e0b6525a1",
-    "0.2.0": "ae5ebc5611300d51fdc44032c7ca442a548dbca5"
+    "0.1.18": "c8264479dcb6414cadbb66752d12b37e0b6525a1"
   },
   "passport-google-oauth": {
     "0.1.5": "fd6b48cf9b20283721c7636e91d094c16a8671d7"
   },
   "passport-oauth": {
     "0.1.15": "*"
-  },
-  "passport-strategy": {
-    "1.0.0": "*"
   },
   "path-is-absolute": {
     "1.0.0": "263dada66ab3f2fb10bf7f9d24dd8f3e570ef912"
@@ -786,8 +784,8 @@
     "1.0.6": "c86cb3e507ab2f96da4500bd34fcf46a1e9dfe5e"
   },
   "socket.io-parser": {
-    "2.1.2": "*",
-    "2.2.0": "*"
+    "2.1.2": "876655b9edd555c5bdf7301cedf30a436c67b8b0",
+    "2.2.0": "2609601f59e6a7fab436a53be3d333fbbfcbd30a"
   },
   "source-map": {
     "0.1.34": "a7cfe89aec7b1682c3b198d0acfb47d7d090566b",

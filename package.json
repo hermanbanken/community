@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "body-parser": "",
-    "connect-mongo": "",
+    "connect-mongo": "^0.8.0",
     "cookie-parser": "",
     "ejs": "~0.8.5",
     "express": "4.x",
