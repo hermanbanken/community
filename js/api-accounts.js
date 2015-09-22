@@ -28,12 +28,15 @@ module.exports = function(ExpressApp, Database, Community){
 	function handleIndex(req, res, next){
 		console.log("Index");
 		Q.all([User.find(), Bill.find(), Account.find()]).spread(function(users, bills, accounts){
+			if(req.accepts('html','json') == 'html')
 			res.render('accounts', {
 				title: 'Accounts',
 				bills: bills,
 				users: users,
 				accounts: accounts,
 			});
+			else
+			res.send(200, accounts);
 		}).fail(next)
 	}
 
