@@ -8,7 +8,8 @@ var Q = require('q'),
 	MongoClient = require('mongodb').MongoClient,
 	bodyParser = require("body-parser"),
 	expressSession = require("express-session"),
-	MongoStore = require('connect-mongo')(expressSession);
+	MongoStore = require('connect-mongo')(expressSession)
+	morgan = require('morgan');
 
 function scripts(Community){
 	return function(req, res, next){
@@ -83,6 +84,7 @@ Community.prototype.start = function(db){
 		}))
 		.use(passport.initialize())
 		.use(passport.session())
+		.use(morgan('dev'))
 		.use(scripts(this));
 
 	// Start core modules
