@@ -20,6 +20,7 @@
     "moment": "~2.7.0",
     "mongo-store": "",
     "mongodb": "1.3.x",
+    "morgan": "^1.6.1",
     "multi-views": "^0.1.1",
     "passport": "*",
     "passport-google-oauth": "*",
@@ -55,8 +56,7 @@
       "clientid": "<client id here>",
       "secret": "<secret here>"
     },
-    "plugins": [
-    ]
+    "plugins": []
   },
   "license": "MIT"
 }
